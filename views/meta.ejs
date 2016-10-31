@@ -1,0 +1,259 @@
+<!-- views/meta.ejs -->
+<!doctype html>
+<html lang="en">
+  <head>  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title id="header">Heroes rub it on building</title>
+    <link href="/bootstrap-meta.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/smoothDivScroll.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">New Meta</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Account</a></li>
+            <li><a href="#">About</a></li>          
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 col-md-3 sidebar">
+          <div class="nav nav-sidebar">
+            <p id="stat1">Stat 1 </p>
+            <p id="stat2">Stat 2 </p>
+            <!-- <p id="stat3">Stat 3 </p>
+            <p id="stat4">Stat 4 </p>            
+            <p id="stat5">Stat 5 </p>     -->                               
+            <p id="charGames">charGames</p>
+          </div>
+        </div>
+
+        <div class="col-sm-10 col-sm-offset-2 col-md-9 col-md-offset-3 main">          
+          <h2 id="currentMap">Map</h2>
+          <div class="row placeholders">            
+            <div id="makeMeScrollable" class="col-sm-12 col-md-12 mapScroll">          
+              <img src="css/bg_towers-of-doom.jpg" id="Towers" class="map"/>
+              <img src="css/bg_infernal-shrines.jpg" id="Shrines" class="map"/>
+              <img src="css/bg_battlefield-of-eternity.jpg" id="Battlefield" class="map"/>
+              <img src="css/bg_tomb-of-the-spider-queen.jpg" id="Tomb" class="map"/>
+              <img src="css/bg_sky-temple.jpg" id="Temple" class="map"/>
+              <img src="css/bg_garden-of-terror.jpg" id="Garden" class="map"/>
+              <img src="css/bg_blackhearts-bay.jpg" id="Bay" class="map"/>
+              <img src="css/bg_dragon-shire.jpg" id="Shire" class="map"/>
+              <img src="css/bg_haunted-mines.jpg" id="Mines" class="map"/>
+              <img src="css/bg_cursed-hollow.jpg" id="Hollow" class="map"/>
+            </div>
+          </div>
+
+          <br>
+          <h2 id="roster">Roster</h2>
+          <div id="makeMeScrollable" class="heroesContainer">                 
+            <!-- JQuery function will fill this -->
+          </div>
+          <br>        
+
+          <div class="etContainer">
+            <h2 id="T2">Enemy Team Composition</h2>
+            <div class="playerWrap">          
+              <form method="post" action="">
+                <label for="p6Name">Player 6 username: </label>
+                <input type="text" id="p1Name" />
+              </form>
+              <br>
+              <div class="drop" id="p6Drop"></div>
+              <select id="p6Char" class="enemyTeamChar" name="p6Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+              <br>
+              <div class="charHistory" id="p6info"></div>
+            </div>
+              
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p7Name">Player 7 username: </label>
+                <input type="text" id="p7Name" />
+              </form>
+              <br>
+              <div class="drop" id="p7Drop"></div>          
+              <select id="p7Char" class="enemyTeamChar" name="p7Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+              <br>
+              <div class="charHistory" id="p7info"></div>
+            </div>
+              
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p8Name">Player 8 username: </label>
+                <input type="text" id="p8Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p8Drop"></div>
+              <select id="p8Char" class="enemyTeamChar" name="p8Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+              <br>
+              <div class="charHistory" id="p8info"></div>
+            </div>
+
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p9Name">Player 9 username: </label>
+                <input type="text" id="p9Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p9Drop"></div>
+              <select id="p9Char" class="enemyTeamChar" name="p9Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+              <br>
+              <div class="charHistory" id="p9info"></div>
+            </div>  
+
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p10Name">Player 10 username: </label>
+                <input type="text" id="p10Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p10Drop"></div>
+              <select id="p10Char" class="enemyTeamChar" name="p10Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+              <br>
+              <div class="charHistory" id="p10info"></div>
+            </div>
+          
+          <!--
+          </div> 
+          <div class="ytContainer">
+            <h2 id="T1">Your Team Composition</h2>
+            <div class="playerWrap">          
+              <form method="post" action="">
+                <label for="p1Name">Player 1 username: </label>
+                <input type="text" id="p1Name" />
+              </form>
+              <br>
+              <div class="drop" id="p1Drop"></div>
+              <select id="p1Char" name="p1Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+            </div>
+              
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p2Name">Player 2 username: </label>
+                <input type="text" id="p2Name" />
+              </form>
+              <br>
+              <div class="drop" id="p2Drop"></div>          
+              <select id="p2Char" name="p2Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+            </div>
+              
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p3Name">Player 3 username: </label>
+                <input type="text" id="p3Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p3Drop"></div>
+              <select id="p3Char" name="p3Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+            </div>
+
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p4Name">Player 4 username: </label>
+                <input type="text" id="p4Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p4Drop"></div>
+              <select id="p4Char" name="p4Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+            </div>  
+
+            <div class="playerWrap">
+              <form method="post" action="">
+                <label for="p5Name">Player 5 username: </label>
+                <input type="text" id="p5Name" />
+              </form>  
+              <br>      
+              <div class="drop" id="p5Drop"></div>
+              <select id="p5Char" name="p5Char">
+                <option value="- Select One -">- Select one -</option>
+              </select>
+            </div>
+
+          </div>
+          -->
+              
+          
+          
+        </div>
+        <ul id="debug">DEBUGGING BELOW. </ul> 
+      </div>
+    </div>
+
+  <% if (heroesRoster) {%>
+    <!-- <h2>I have the heroes roster! </h2> -->
+    <script>
+      var heroesRoster = <%- heroesRoster %>
+    </script>
+  <% } %>
+
+  <script src="proj/jquery-1.12.0.js"></script> 
+  <script src="proj/jquery-ui.js"></script>
+ 
+  <script src="proj/newmeta.js"></script>
+
+  <!-- Latest version (3.1.4) of jQuery Mouse Wheel by Brandon Aaron
+       You will find it here: https://github.com/brandonaaron/jquery-mousewheel -->
+  <script src="proj/jquery.mousewheel.min.js" type="text/javascript"></script>
+  <!-- jQuery Kinectic (1.8.2) used for touch scrolling -->
+  <script src="proj/jquery.kinetic.min.js" type="text/javascript"></script>
+  <!-- Smooth Div Scroll 1.3 minified-->
+  <script src="proj/jquery.smoothdivscroll-1.3-min.js" type="text/javascript"></script>
+  <!-- Plugin initialization -->
+  <script type="text/javascript">
+    // Initialize the plugin with no custom options
+    $(document).ready(function () {
+      // None of the options are set
+      $("div#makeMeScrollable").smoothDivScroll({
+        
+        visibleHotSpotBackgrounds: "hover",
+
+        mousewheelScrolling: "allDirections",
+        mousewheelScrollingStep: 50,
+        manualContinuousScrolling: true,
+        touchScrolling: true,
+        hotSpotScrollingStep: 10,       
+        autoScrolling: ""
+      });
+    });
+  </script>
+  </body>
+</html>

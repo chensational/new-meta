@@ -1,0 +1,121 @@
+/* CSS for adding content example */
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:800italic);
+
+#makeMeScrollable div.mapScroll{
+    position: relative;
+    display: block;
+    float: left;    
+}
+
+.mapScroll{
+    background-color:#003066;
+    overflow:hidden;       
+    width:100%;
+    height:100%;
+    color:white;
+}
+
+.map {
+    opacity:0.4;
+    float:left;
+    position:relative;
+    width:200px;
+    height:auto;
+    left:0px;
+    margin:0px;
+}
+
+.hover{
+    opacity:1;
+}
+
+.selected{
+    opacity:1;
+}
+
+.notSelected{
+    opacity:0.4;
+}
+#stat1{
+    font-size:120%;
+}
+#stat2{
+    font-size: 80%;
+}
+
+#makeMeScrollable div.heroesContainer{
+    position: relative;
+    display: block;
+    float: left;
+    margin: 10px;
+    padding: 10px;
+
+    background-color:#003066;
+    width:100%;
+    height:180px;
+    color:white;
+}
+
+.drop{
+    background-color:#003066;
+    float:left;
+    width:125px;
+    height:180px;
+    left:5px;
+    margin: 0px;
+    border: 1px solid;
+    border-color: black;
+}
+
+div.drop img{
+    background-color:#003066;
+    float:left;
+    position:relative;
+    width:125px;
+    height:180px;
+    left:0px;
+    margin: 0px;
+}
+
+.ytContainer{
+    position:relative;
+    background-color:#003066;
+    overflow:hidden;
+    height:400px;
+    color:white;
+}
+
+.etContainer{
+    position:relative;
+    background-color:white;
+    overflow:hidden;
+    height:525px;
+    color:#003066;
+}
+
+input {
+    width:132px;
+}
+
+.playerWrap{
+    float:left;
+    left:0px;
+    width:125px;
+    height:100px;
+    margin: 25px;
+}
+
+select {
+    margin-top:5px;
+    width: 132px;
+    color: black;
+}
+
+}
+/* Fix for full-screen background image: Chrome on Android */
+html{
+    height:100%;
+    min-height:100%;}
+body{
+    padding-top:55px;}

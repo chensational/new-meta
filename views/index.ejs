@@ -1,0 +1,54 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Heroes Rub it on building</title>
+    <link rel="stylesheet" href="/bootstrap-meta.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body        { padding-top:80px; }
+        .continue { font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-cogs"></span> New Meta</h1>
+
+        <p>Options:</p>
+
+        <a href="/meta" class="btn btn-default"><span class="fa fa-gamepad"></span> Draft Analysis </a>
+                        
+        <!-- <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a> -->
+        <form class="btn btn-default" id='downloadForm' action='http://localhost:8080/export' method='post'>            
+        <span class="fa fa-cloud-download"> </span> <input type='submit' value='Export To Spreadsheet' /> </form>
+
+    </div>
+
+</div>
+
+<div class="custom text-center">
+    <form ref='uploadForm' class="btn btn-alternate"
+        id='uploadForm' 
+        action='http://localhost:8080/upload' 
+        method='post' 
+        encType="multipart/form-data">
+            <input type="file" class="btn btn-alternate" name="sampleFile" multiple />
+            <input type='submit' class="btn btn-alternate" value='Upload!' />
+    </form>
+</div>
+
+<h3> Status </h3>
+<ul><% uploadSuccess.forEach(function(s) { %>
+        <li><%= s.originalname %> Successfully Uploaded!</li>
+    <% }); %>
+</ul>
+<ul><% uploadError.forEach(function(e) { %>
+        <li>Cannot upload <%= e %> files </li>
+    <% }); %>
+</ul>
+
+</body>
+</html>
