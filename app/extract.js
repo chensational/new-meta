@@ -18,28 +18,31 @@ exports.extractstuff = function(file_path,heroesRoster){
 	var numExisting = 0;
 	var numError = 0;
 	fs.readdir(file_path,function(err,files){
-	asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
-		console.log("Number Games Inserted: "+res.numUpserted);
-		console.log("Number Games Which Already Exist: "+res.numExisting);
-		console.log("Number Games Error: "+res.numError);
-
-		fs.emptyDir(file_path, function (err) {
-			if (!err) console.log('Empty Dir: Success!');
-			//update Performance - writes to the Performance db
-			updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
-				console.log("updatePerformance was a success!")
-				//export stuff into excel files...
-				Export.toExcel(heroesRoster.slice(0),function(err){
-					if(err){
-						console.log("Does this runnnn?");
-						console.log(err);
-					} else {
-						console.log("Export.toExcel successful!");
-					}
-				})
-			});
-		})
-	}); });
+		if(!files){ console.log("No files uploaded")};
+		else {
+			asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
+			console.log("Number Games Inserted: "+res.numUpserted);
+			console.log("Number Games Which Already Exist: "+res.numExisting);
+			console.log("Number Games Error: "+res.numError);
+			fs.emptyDir(file_path, function (err) {
+				if (!err) console.log('Empty Dir: Success!');
+				//update Performance - writes to the Performance db
+				updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
+					console.log("updatePerformance was a success!")
+					//export stuff into excel files...
+					Export.toExcel(heroesRoster.slice(0),function(err){
+						if(err){
+							console.log("Does this runnnn?");
+							console.log(err);
+						} else {
+							console.log("Export.toExcel successful!");
+						}
+					})
+				});
+			})
+		});
+		}
+	});
 };
 
 //intent of this function is to refresh Performance db with most 
