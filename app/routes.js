@@ -20,6 +20,9 @@ var s3 = new aws.S3();
 
 var fileFilter = function(req,file,cb){
 	if (path.extname(file.originalname) !== '.StormReplay') {
+		if(!req.fileValError){
+			req.fileValError = [];
+		}
 		req.fileValError.push("Error uploading "+file.originalname+" - Only upload .StormReplay files")
 		return cb(null,false) //, new Error("Cannot upload extensions of type: "+path.extname(file.originalname)));
 	}
@@ -62,7 +65,7 @@ module.exports = function(app, passport){
 	});
 
 	app.post('/upload', upload.array('stormFiles'), function(req,res,next){
-		var req.fileValError = [];
+		req.fileValError = [];
 
 		if(!req.files){
 			return res.status(403).send("No files selectd");
