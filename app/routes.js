@@ -10,6 +10,8 @@ var multerS3 = require('multer-s3');
 var path = require('path');
 var fs = require('graceful-fs-extra');
 
+var file_path = 'https://console.aws.amazon.com/s3/home?bucket=newmetahots';
+
 aws.config = new aws.Config();
 aws.config.update({
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
