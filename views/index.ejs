@@ -22,7 +22,7 @@
                         
         <!-- <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
         <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a> -->
-        <form class="btn btn-default" id='downloadForm' action='http://localhost:5000/export' method='post'>            
+        <form class="btn btn-default" id='downloadForm' action='https://newmeta.herokuapp.com/export' method='post'>          
         <span class="fa fa-cloud-download"> </span> <input type='submit' value='Export To Spreadsheet' /> </form>
 
     </div>
@@ -32,7 +32,7 @@
 <div class="custom text-center">
     <form ref='uploadForm' class="btn btn-alternate"
         id='uploadForm' 
-        action='http://localhost:5000/upload' 
+        action='https://newmeta.herokuapp.com/upload' 
         method='post' 
         encType="multipart/form-data">
             <input type="file" class="btn btn-alternate" name="stormFiles" multiple />
