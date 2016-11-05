@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
-var connection = mongoose.connect('mongodb://localhost:27017/new-meta');
+//var connection = mongoose.connect('mongodb://heroku_stzbwk35:up7ofiq7vqjmb9062h05ibhsbv@ds139847.mlab.com:39847/heroku_stzbwk35');
 //define schema for our user model
 var gameSchema = mongoose.Schema({
 	_id: String,
@@ -18,7 +18,7 @@ var gameSchema = mongoose.Schema({
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number},
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number},
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number}]
-	},{versionKey: false });
+	},{versionKey: false, collection: 'games' });
 /*
 gameSchema.statics.findByHero = function(hero,callback){
 	return this.find({"playerInfo.player_hero":hero},callback);
@@ -44,4 +44,4 @@ gameSchema.statics.findHeroWins = function(query,char,callback){
 	}).exec(callback);
 }
 //create the model for users and expose it to our app
-module.exports = connection.model('Game', gameSchema);
+module.exports = mongoose.model('Game', gameSchema);

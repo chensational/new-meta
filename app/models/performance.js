@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
-var connection = mongoose.createConnection('mongodb://localhost:27017/new-meta');
+//var connection = mongoose.createConnection('mongodb://heroku_stzbwk35:up7ofiq7vqjmb9062h05ibhsbv@ds139847.mlab.com:39847/heroku_stzbwk35');
 
 //define schema for our user model
 var performanceSchema = mongoose.Schema({
@@ -15,11 +15,11 @@ var performanceSchema = mongoose.Schema({
 		p_wins: Number,
 		p_winPercent: Number
 		}, {strict: false, versionKey:false})
-	]},{strict: false, versionKey: false});
+	]},{strict: false, versionKey: false, collection: 'performances'});
 
 performanceSchema.statics.basicStats = function(hero){
 	return this.find({char_name: hero});
 }
 
 //create the model for users and expose it to our app
-module.exports = connection.model('Performance', performanceSchema);
+module.exports = mongoose.model('Performance', performanceSchema);

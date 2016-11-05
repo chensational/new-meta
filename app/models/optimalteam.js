@@ -8,7 +8,7 @@ var Performance = require('./performance');
 var Record = require('./record');
 var Optimize = require('./optimalteam');
 
-mongoose.createConnection('mongodb://localhost:27017/new-meta'); //connect to our database
+//mongoose.createConnection('mongodb://heroku_stzbwk35:up7ofiq7vqjmb9062h05ibhsbv@ds139847.mlab.com:39847/heroku_stzbwk35'); //connect to our database
 
 module.exports.optimalTeam = function(arr,callback){
 	//console.log(arr);

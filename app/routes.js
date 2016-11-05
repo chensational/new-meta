@@ -3,19 +3,20 @@ var Performance = require('./models/performance');
 var Record = require('./models/record');
 var Optimize = require('./models/optimalteam');
 var ExtractReplays = require('./extract.js');
+var zip = require('express-zip');
+var aws = require('aws-sdk');
 var multer = require('multer');
+var multerS3 = require('multer-s3');
 var path = require('path');
-var file_path = './replays/';
+var fs = require('graceful-fs-extra');
 
-var storage = multer.diskStorage({
-	destination: function(req,file,cb){
-		cb(null,'../meta-passport/replays');
-	},
-	filename: function(req,file,cb){
-		//console.log(file);
-		cb(null,file.originalname+"_"+Date.now()+"."+path.extname(file.originalname));
-	}
-})
+aws.config = new aws.Config();
+aws.config.update({
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+}) 
+
+var s3 = new aws.S3(); 
 
 var fileFilter = function(req,file,cb){
 	if (path.extname(file.originalname) !== '.StormReplay') {
@@ -27,7 +28,22 @@ var fileFilter = function(req,file,cb){
 	}	
 }
 
-var upload = multer({storage: storage, fileFilter: fileFilter}).array('sampleFile',9999);
+var upload = multer({
+	storage: multerS3({
+		s3: s3,
+		bucket: 'newmetahots',
+		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+		region: 'us-east-1',
+		metadata: function(req,file,cb){
+			cb(null, Object.assign({}, req.body));
+		},
+		key: function(req,file,cb){
+			cb(null, Date.now().toString()+path.extname(file.originalname))
+		}
+	}),
+	fileFilter: fileFilter
+}) 
 
 module.exports = function(app, passport){
 	var heroArray = [];
@@ -45,19 +61,16 @@ module.exports = function(app, passport){
 		res.render('index.ejs', {uploadSuccess: [], uploadError:[]});//load the index.ejs file
 	});
 
-	app.post('/upload',function(req,res){
+	app.post('/upload', upload.array('stormFiles'), function(req,res,next){
 		req.fileValError = [];
-		upload(req,res, function(err){	
-			if(err){
-				console.log('Error Occured');
-				return;
-			}			
-			res.render('index.ejs',{uploadSuccess: req.files, uploadError:req.fileValError});
-			//insert heroprotocol parse function here
-			ExtractReplays.extractstuff(file_path,heroesRoster);
-		})
 
-	});
+		if(!req.files){
+			return res.status(403).send("No files selectd");
+		}
+		res.render('index.ejs',{uploadSuccess: req.files, uploadError:req.fileValError});
+		//insert heroprotocol parse function here
+		// *** UNCOMMENT THIS WHEN WORKING *** ExtractReplays.extractstuff(file_path,heroesRoster);
+	})
 
 	app.post('/export',function(req,res){
 		res.zip([
@@ -147,129 +160,6 @@ function calcStats(char,cb){
 		cb(charStats);
 	})
 }
-
-/* COPYING TO EXTRACT.JS - can delete if everything works okay...
-//intent of this function is to refresh Performance db with most 
-//up to date data when you know new data is loaded into the server
-function updatePerformance(rosterArray,heroesRoster,callback){
-	if(rosterArray.length<1){		
-		callback();
-	}else{
-		var arrayVal = rosterArray.splice(0,1);	
-		loadStats(arrayVal,heroesRoster,function(serverResponse){
-			var sortPerformance = [];
-			var perfArray = [];
-
-			for(hero in serverResponse.performance){//perf['abathur'] = {games,wins,winPerc} [(0) hero,(1) games,(2) wins,(3) winPercent]
-				sortPerformance.push([hero,serverResponse.performance[hero].games,serverResponse.performance[hero].wins,serverResponse.performance[hero].winPercent])
-			}
-			// [[(0) hero,(1) games,(2) wins,(3) winPercent],[hero,games,wins,winPerc],[...],etc.
-			var sortedPerformance = sortPerformance.sort(function(a,b){ return b[3] - a[3]});
-
-			for(n=0;n<sortedPerformance.length;n++){
-				if(!sortedPerformance[n][3]){
-					var winP = 0;
-				}else{
-					winP = sortedPerformance[n][3];
-				}			
-				perfArray[n] = {
-					p_name: sortedPerformance[n][0],
-					p_games: sortedPerformance[n][1],
-					p_wins: sortedPerformance[n][2],
-					p_winPercent: winP
-				}
-			}
-			
-			var savePerf = new Performance({
-				_id: Date.now(),
-				char_name: arrayVal,
-				games: serverResponse.games,
-				wins: serverResponse.wins,
-				winPercent: serverResponse.winPercent,
-				performance: perfArray
-			})
-
-			savePerf.save(function(err,perf){
-				if(err) return console.error(err);
-				updatePerformance(rosterArray,heroesRoster,callback);
-			})
-		})
-	}
-}
-
-
-//takes one char and loads it's overall win percentage and 
-//it's performance against all other characters on the roster
-//returns that info to a callback
-function loadStats(char,rosterArray,callback){
-	var gQuery = Game.findByHero(char); //returns player_info documents
-	var pQuery = Game.fBHReturnGames(char); //returns game documents
-	var p = {};
-	var games, wins, winPercent;
-	gQuery.find(function(err,gTotal){
-		games = gTotal.length;
-		Game.findHeroWins(this,char,function(err,gWins){ //returns all player_infodocuments where the char won
-			if(err) throw err;
-			wins = gWins.length;
-			winPercent = Math.round((wins/games)*100);
-			asyncMap(char,rosterArray.slice(0),pQuery,p,function(data){
-				var statResult = {
-					wins: wins,
-					games: games,
-					winPercent: winPercent,
-					performance: data
-				};
-				callback(statResult);
-			});			
-		});
-	});	
-}
-*/
-/* Returns performance stats against every character on the roster in an object
-arr = rosterArray
-perfQuery = mongoose request query (all games one character was in)
-charA = character we want to get performance data on
-perf = blank object, will store performance data
-perf [ 'Abathur' ] = { games: games,wins: wins,winPercent:winPercent }
-cb = callback
-*/
-/*
-function asyncMap(charA,arr,pQuery,perf,cb){
-	if(arr.length<1){
-		//console.log("JSON.stringify(perf) "+JSON.stringify(perf));
-		cb(perf); 
-	}else{
-		var arrayVal = arr.splice(0,1);
-		pQuery.count({ $and: [ //find games where character A is on team 1 and character B is on team 2
-			{playerInfo: { $elemMatch: { player_hero: charA, team_id: 0}}},
-			{playerInfo: { $elemMatch: { player_hero: arrayVal, team_id: 1}}} ]},
-		function(err,gamesA){ // find more games where character A is on team 2 and character B is on team 1
-			pQuery.count({ $and: [
-			{playerInfo: { $elemMatch: { player_hero: charA, team_id: 1}}},
-			{playerInfo: { $elemMatch: { player_hero: arrayVal, team_id: 0}}} ]},
-		function(err,gamesB){ // find wins
-			pQuery.count({ $and: [ 
-			{playerInfo: { $elemMatch: { player_hero: charA, team_id: 0, match_result: 1}}},
-			{playerInfo: { $elemMatch: { player_hero: arrayVal, team_id: 1}}} ]},
-		function(err,winsA){ // find more wins
-			pQuery.count({ $and: [
-			{playerInfo: { $elemMatch: { player_hero: charA, team_id: 1, match_result: 1}}},
-			{playerInfo: { $elemMatch: { player_hero: arrayVal, team_id: 0}}} ]},
-		function(err,winsB){
-			var games = gamesA+gamesB;
-			var wins = winsA+winsB;
-			var winPercent = Math.round((wins/games)*100); 
-			//perf['Abathur'] = {games,wins,winPercent}
-			perf[arrayVal] = {
-				games: games,
-				wins: wins,
-				winPercent: winPercent
-			}
-			asyncMap(charA,arr,pQuery,perf,cb);
-		})})})});
-	};
-}; 
-*/
 
 function isLoggedIn(req,res,next){
 	if (req.isAuthenticated()) 

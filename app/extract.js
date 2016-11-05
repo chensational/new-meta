@@ -1,11 +1,13 @@
 //for testing:
 //node heroprotocol.js "./replays/Battlefield of Eternity (3).StormReplay" -d
 
+//runs when user uploads .stormreplay files
+
 const fs = require('graceful-fs-extra');
 const path = require('path');
 const zip = require('express-zip');
 const mongoose = require('mongoose');
-const heroprotocol = require('../../node_modules/heroprotocol/');
+const heroprotocol = require('heroprotocol');
 const Game = require('./models/games');
 const Performance = require('./models/performance');
 const Record = require('./models/record');

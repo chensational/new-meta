@@ -2,12 +2,9 @@ var Game = require('./models/games');
 var Performance = require('./models/performance');
 var Record = require('./models/record');
 var Export = require('./excel.js');
-var fs = require('fs');
+var fs = require('graceful-fs-extra');
 
 var excelbuilder = require('msexcel-builder');
-
-var heroesRoster = ["Abathur","Anub\'arak", "Artanis", "Arthas", "Azmodan", "Brightwing", "Chen", "Cho", "Diablo", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Muradin", "Murky", "Nazeebo", "Nova", "Raynor", "Rehgar", "Rexxar", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Xul", "Zagara", "Zeratul"];
-//remove heroesRoster after you're done testing
 
 function asyncFor(arr,perf_sheet,p_row,cb){
 	if(arr.length<1){

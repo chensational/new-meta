@@ -1,8 +1,13 @@
+//git add .
+//git commit -m "<Notes about update here>"
+//git push heroku master
+
+//heroku local web
 
 // gotta setup pre-requisite requirements
 var express = require('express');
 var app = express();
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 5000;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -13,9 +18,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var configDB = require('./config/database.js');
 
-mongoose.createConnection(configDB.url); //connect to our database
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000}}, 
+				replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000 } } };
+var configDB = require('./config/database.js');
+mongoose.connect(configDB.url, options); //connect to our database
+var conn = mongoose.connection;
+conn.on('error', console.error.bind(console, 'connection error:'));
 
 require('./config/passport')(passport); //pass passport object for configuration
 
@@ -36,7 +45,9 @@ app.use(passport.session()); //persistent login sessions
 app.use(flash()); //use connect-flash for flash messages stored in session
 
 // routes
-require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
+conn.once('open',function callback(){
+	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
+})
 
 //launch
 app.listen(port);
