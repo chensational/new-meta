@@ -18,7 +18,7 @@ exports.extractstuff = function(file_path,heroesRoster){
 	var numExisting = 0;
 	var numError = 0;
 	fs.readdir(file_path,function(err,files){
-		if(!files){ console.log("No files uploaded")};
+		if(!files){ console.log("No files uploaded")}
 		else {
 			asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
 			console.log("Number Games Inserted: "+res.numUpserted);
