@@ -13,7 +13,7 @@ function Hero(name,games,wins,winPercent,performance){
 
 (function(){ //fills html with images of all characters on roster
 	for (n=0;n<heroesRoster.length;n++){
-		$('.heroesContainer').append('<div class="drop"><img id="'+heroesRoster[n]+'" src="css/'+heroesRoster[n]+'.jpg" /></div>')
+		$('.heroesContainer').append('<div class="drop"><img id="'+heroesRoster[n]+'" src="public/css/'+heroesRoster[n]+'.jpg" /></div>')
 	}
 })();
 
@@ -100,12 +100,12 @@ $('.drop').siblings("select").on("change", function(){ //finds all drop elements
 	var oldImgId = $(this).siblings('.drop').children('img').attr('id');
 	if (optionId === '- Select One -'){ // checks if the optionId is the default option
 		$(this).siblings('.drop').children("img").remove(); //finds the sibling drop element and removes it's old img element
-		$(".drop:not(:has('img')):first").append('<img id="'+oldImgId+'" src="css/'+oldImgId+'.jpg" />'); //move the old img back to the top container
+		$(".drop:not(:has('img')):first").append('<img id="'+oldImgId+'" src="public/css/'+oldImgId+'.jpg" />'); //move the old img back to the top container
 	}		
 	else{ //otherwise append the img inside the drop element 
 		$(this).siblings('.drop').children("img").remove(); //finds the sibling drop element and removes it's old img element
 		$('.drop').children('img[id="'+optionId+'"]').remove(); //finds the other drop elements containing the img matching the optionId and removes it
-		$('<img id="'+optionId+'" src="css/'+optionId+'.jpg" />').appendTo($(this).siblings('.drop')); //adds the img element matching the optionId to the drop element
+		$('<img id="'+optionId+'" src="public/css/'+optionId+'.jpg" />').appendTo($(this).siblings('.drop')); //adds the img element matching the optionId to the drop element
 		$(this).siblings('.charHistory').html("Counterpicks: ");
 		var i = 0
 		for(var prop in heroArray[optionId].performance){
