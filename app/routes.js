@@ -79,8 +79,8 @@ module.exports = function(app, passport){
 
 	app.post('/export',function(req,res){
 		res.zip([
-			{ path: '../meta-passport/excel/games.xlsx', name: 'Games.xlsx'},
-			{ path: '../meta-passport/excel/performance.xlsx', name: 'Performance.xlsx'}
+			{ path: '../excel/games.xlsx', name: 'Games.xlsx'},
+			{ path: '../excel/performance.xlsx', name: 'Performance.xlsx'}
 			], "NewMetaExport.zip" );		
 	})
 
