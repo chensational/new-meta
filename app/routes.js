@@ -62,14 +62,14 @@ module.exports = function(app, passport){
 	});
 
 	app.post('/upload', upload.array('stormFiles'), function(req,res,next){
-		req.fileValError = [];
+		var req.fileValError = [];
 
 		if(!req.files){
 			return res.status(403).send("No files selectd");
 		}
 		res.render('index.ejs',{uploadSuccess: req.files, uploadError:req.fileValError});
 		//insert heroprotocol parse function here
-		// *** UNCOMMENT THIS WHEN WORKING *** ExtractReplays.extractstuff(file_path,heroesRoster);
+		ExtractReplays.extractstuff(file_path,heroesRoster);
 	})
 
 	app.post('/export',function(req,res){
