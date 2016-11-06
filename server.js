@@ -49,16 +49,15 @@ mongoose.connect(configDB, options, function(err,res){
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open',function(){
-	var Game = require('./models/games');
-	var Performance = require('./models/performance');
-	var Record = require('./models/record');
+	var Game = require('./app/models/games');
+	var Performance = require('./app/models/performance');
+	var Record = require('./app/models/record');
 	console.log("connected to collections!")
+	//routes
+	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
+
 })
 
-
-
-//routes
-require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
 
 //launch
 app.listen(port);
