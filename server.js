@@ -43,10 +43,13 @@ var configDB = require('./config/database.js');
 var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open',function callback(){
-	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
+	var Game = require('./models/games');
+	var Performance = require('./models/performance');
+	var Record = require('./models/record');
+	//launch
+	app.listen(port);
+	console.log('The magic happens on port ' + port);
 })
 mongoose.connect(configDB.url, options); //connect to our database
+require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
 
-//launch
-app.listen(port);
-console.log('The magic happens on port ' + port);
