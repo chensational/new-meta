@@ -18,18 +18,26 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var configDB = require('./config/database.js');
+var configDB = process.env.MONGODB_URI;
+//var configDB = require('./config/database.js');
 var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000}}, 
 				replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000 } } };
-var conn = mongoose.connection;
-conn.on('error', console.error.bind(console, 'connection error:'));
-conn.once('open',function(){
-	var Game = require('./models/games');
-	var Performance = require('./models/performance');
-	var Record = require('./models/record');
-})
+//var conn = mongoose.connection;
+//conn.on('error', console.error.bind(console, 'connection error:'));
+//conn.once('open',function(){
+	//var Game = require('./models/games');
+	//var Performance = require('./models/performance');
+	//var Record = require('./models/record');
+//	console.log("mongodb connection open!")
+//})
 
-mongoose.connect(configDB.url, options); //connect to our database
+mongoose.connect(configDB, options, function(err,res){
+	if (err) {
+      console.log ('ERROR connecting to: ' + configDB + '. ' + err);
+    } else {
+      console.log ('Succeeded connected to: ' + configDB);
+    }
+}); //connect to our database
 
 require('./config/passport')(passport); //pass passport object for configuration
 
@@ -37,7 +45,6 @@ require('./config/passport')(passport); //pass passport object for configuration
 app.use(express.static('public'));
 app.use(morgan('dev')); //log every request to the console
 app.use(cookieParser()); //read cookies (needed for auth)
-//app.use(bodyParser()); // get information from html forms
 app.use(bodyParser.json()); //support json encoded bodies
 app.use(bodyParser.urlencoded({extended: false })); //support encoded bodies
 
