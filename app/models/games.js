@@ -18,7 +18,7 @@ var gameSchema = mongoose.Schema({
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number},
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number},
 		{bnet_id : Number, player_name: String, player_hero: String, team_id: 1, match_result: Number}]
-	},{versionKey: false, collection: 'games' });
+	},{strict: false, versionKey: false, collection: 'games' });
 /*
 gameSchema.statics.findByHero = function(hero,callback){
 	return this.find({"playerInfo.player_hero":hero},callback);
