@@ -24,8 +24,8 @@ exports.extractstuff = function(file_path,heroesRoster){
 	var numUpserted = 0;
 	var numExisting = 0;
 	var numError = 0;
-	var fsAWS = new S3fs('file_path',s3options);
-	fsAWS.readdirp(file_path).then(function(files){
+	var fsAWS = new S3fs('newmetahots',s3options);
+	fsAWS.readdirp('newmetahots').then(function(files){
 		if(!files){ console.log("No files uploaded")}
 		else {
 			asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
