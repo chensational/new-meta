@@ -60,7 +60,7 @@ db.once('open',function(){
 		competitive: false
 	})
 
-	seedJaina.save();
+	seedGame.save();
 
 	console.log("connected to collections!")
 	//routes
