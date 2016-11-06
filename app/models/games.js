@@ -44,4 +44,4 @@ gameSchema.statics.findHeroWins = function(query,char,callback){
 	}).exec(callback);
 }
 //create the model for users and expose it to our app
-module.exports = mongoose.model('Game', gameSchema);
+module.exports = mongoose.model('Game', gameSchema, 'games');

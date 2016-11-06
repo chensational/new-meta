@@ -22,4 +22,4 @@ performanceSchema.statics.basicStats = function(hero){
 }
 
 //create the model for users and expose it to our app
-module.exports = mongoose.model('Performance', performanceSchema);
+module.exports = mongoose.model('Performance', performanceSchema, 'performances');
