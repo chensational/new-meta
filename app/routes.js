@@ -2,7 +2,7 @@ var Game = require('./models/games');
 var Performance = require('./models/performance');
 var Record = require('./models/record');
 var Optimize = require('./models/optimalteam');
-var ExtractReplays = require('./extract.js');
+var Import = require('./extract.js');
 var zip = require('express-zip');
 var aws = require('aws-sdk');
 var multer = require('multer');
@@ -70,11 +70,11 @@ module.exports = function(app, passport){
 		req.fileValError = [];
 
 		if(!req.files){
-			return res.status(403).send("No files selectd");
+			return res.status(403).send("No files selected");
 		}
 		res.render('index.ejs',{uploadSuccess: req.files, uploadError:req.fileValError});
 		//insert heroprotocol parse function here
-		ExtractReplays.extractstuff(file_path,heroesRoster);
+		Import.extractstuff(file_path,heroesRoster);
 	})
 
 	app.post('/export',function(req,res){
