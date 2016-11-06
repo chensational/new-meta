@@ -4,6 +4,7 @@
 //runs when user uploads .stormreplay files
 
 const fs = require('graceful-fs-extra');
+const S3fs = require('s3fs'); 
 const path = require('path');
 const zip = require('express-zip');
 const mongoose = require('mongoose');
@@ -13,18 +14,25 @@ const Performance = require('./models/performance');
 const Record = require('./models/record');
 const Export = require('./excel.js');
 
+var s3options = {
+	region: 'us-east-1',
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+};
+
 exports.extractstuff = function(file_path,heroesRoster){
 	var numUpserted = 0;
 	var numExisting = 0;
 	var numError = 0;
-	fs.readdir(file_path,function(err,files){
+	var fsAWS = new S3fs('file_path',s3options);
+	fsAWS.readdirp(file_path).then(function(files){
 		if(!files){ console.log("No files uploaded")}
 		else {
 			asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
 			console.log("Number Games Inserted: "+res.numUpserted);
 			console.log("Number Games Which Already Exist: "+res.numExisting);
 			console.log("Number Games Error: "+res.numError);
-			fs.emptyDir(file_path, function (err) {
+			fsAWS.rmdirp(file_path).then(function (err) {
 				if (!err) console.log('Empty Dir: Success!');
 				//update Performance - writes to the Performance db
 				updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
