@@ -18,14 +18,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-
-var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000}}, 
-				replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000 } } };
-var configDB = require('./config/database.js');
-mongoose.connect(configDB.url, options); //connect to our database
-var conn = mongoose.connection;
-conn.on('error', console.error.bind(console, 'connection error:'));
-
 require('./config/passport')(passport); //pass passport object for configuration
 
 // set up express
@@ -45,9 +37,15 @@ app.use(passport.session()); //persistent login sessions
 app.use(flash()); //use connect-flash for flash messages stored in session
 
 // routes
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000}}, 
+				replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 3000 } } };
+var configDB = require('./config/database.js');
+var conn = mongoose.connection;
+conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open',function callback(){
 	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
 })
+mongoose.connect(configDB.url, options); //connect to our database
 
 //launch
 app.listen(port);
