@@ -191,7 +191,7 @@ function calcStats(char,cb){
 		sort({_id: -1}).limit(1).stream();
 	pQueryStream.on('data',function(data){		
 		var charStats = new Hero(data.char_name,data.games,data.wins,data.winPercent,data.performance);
-		console.log("charStats!!!: "+charStats);
+		//console.log("charStats!!!: "+charStats);
 		cb(charStats);
 	})
 }

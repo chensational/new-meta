@@ -42,6 +42,7 @@ exports.extractstuff = function(file_path,heroesRoster){
 					updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
 						console.log("updatePerformance was a success!")
 						//export stuff into excel files...
+						/*
 						Export.toExcel(heroesRoster.slice(0),function(err){
 							if(err){
 								console.log("Does this runnnn?");
@@ -49,7 +50,7 @@ exports.extractstuff = function(file_path,heroesRoster){
 							} else {
 								console.log("Export.toExcel successful!");
 							}
-						})
+						}) */
 					});
 				})
 			});
@@ -201,7 +202,7 @@ function asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb){
 			//if(err) console.log(err, err.stack);
 			var initdata = heroprotocol.get(heroprotocol.INITDATA,file);
 			var details = heroprotocol.get(heroprotocol.DETAILS,file);
-			console.log("details: "+details);
+			//console.log("details: "+details);
 			if(details===undefined){
 				console.log("error reading file: "+file);
 				numError++;
