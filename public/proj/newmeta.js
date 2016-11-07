@@ -2,7 +2,7 @@ var heroesMapsObj = { Towers: "Towers of Doom", Shrines: "Infernal Shrines", Bat
 var heroesRoster = heroesRoster;
 var heroArray = [];
 var currentMap = "";
-var indexpath = 'https://newmeta.herokuapp.com/' //'http://localhost:5000'; 
+var indexpath = 'https://newmeta.herokuapp.com' //'http://localhost:5000'; 
 
 
 function Hero(name,games,wins,winPercent,performance){
