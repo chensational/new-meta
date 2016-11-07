@@ -84,11 +84,11 @@ module.exports = function(app, passport){
 	var heroesRoster = ["Abathur","Anub\'arak", "Artanis", "Arthas", "Azmodan", "Brightwing", "Chen", "Cho", "Diablo", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Muradin", "Murky", "Nazeebo", "Nova", "Raynor", "Rehgar", "Rexxar", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Xul", "Zagara", "Zeratul"];
 	
 	heroesRoster.map(function(hero){
-		if(!heroArray[hero]){			
+		//if(!heroArray[hero]){			
 			calcStats(hero,function(data){
 				heroArray[hero] = data;
 			});					
-		}	
+		//}	
 	});
 
 	app.get('/',function(req,res){

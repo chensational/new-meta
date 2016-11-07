@@ -39,19 +39,21 @@ exports.extractstuff = function(file_path,heroesRoster){
 				fs.emptyDir(file_path, function(err) {
 					if (!err) console.log('Empty Dir: Success!');
 					//update Performance - writes to the Performance db
-					updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
-						console.log("updatePerformance was a success!")
-						//export stuff into excel files...
-						/*
-						Export.toExcel(heroesRoster.slice(0),function(err){
-							if(err){
-								console.log("Does this runnnn?");
-								console.log(err);
-							} else {
-								console.log("Export.toExcel successful!");
-							}
-						}) */
-					});
+					if(res.numUpserted>0){
+						updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
+							console.log("updatePerformance was a success!")
+							//export stuff into excel files...
+							/*
+							Export.toExcel(heroesRoster.slice(0),function(err){
+								if(err){
+									console.log("Does this runnnn?");
+									console.log(err);
+								} else {
+									console.log("Export.toExcel successful!");
+								}
+							}) */
+						});
+					}
 				})
 			});
 		}
@@ -79,7 +81,7 @@ function updatePerformance(rosterArray,heroesRoster,callback){
 			for(n=0;n<sortedPerformance.length;n++){
 				//console.log("sortedPerformance[n]: "+sortedPerformance[n])
 				if(isNaN(sortedPerformance[n][3])){
-					console.log("replacing NaN/null")
+					//console.log("replacing NaN/null")
 					var winP = 0;
 				}else{
 					winP = sortedPerformance[n][3];
