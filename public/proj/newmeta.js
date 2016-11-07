@@ -2,6 +2,8 @@ var heroesMapsObj = { Towers: "Towers of Doom", Shrines: "Infernal Shrines", Bat
 var heroesRoster = heroesRoster;
 var heroArray = [];
 var currentMap = "";
+var indexpath = 'https://newmeta.herokuapp.com/' //'http://localhost:5000'; 
+
 
 function Hero(name,games,wins,winPercent,performance){
 	this.name = name;
@@ -29,7 +31,7 @@ heroesRoster.map(function(c){
 			queryType: 'calcStats', 
 			charHover: c,  
 		};
-		var posting = $.post('https://newmeta.herokuapp.com/meta',reqParam);
+		var posting = $.post(indexpath+'/meta',reqParam);
 		posting.done(function(dataObj){
 			heroArray[c] = new Hero(c,dataObj.games,dataObj.wins,dataObj.winPercent,dataObj.performance);
 		})
@@ -56,7 +58,7 @@ $(function(){
 			enemyTeam: JSON.stringify(enemyTeam),
 		};
 
-		var posting = $.post('https://newmeta.herokuapp.com/meta',reqParam);
+		var posting = $.post(indexpath+'/meta',reqParam);
 		posting.done(function(dataObj){
 			//$('#debug').append("MEOW");
 			$('#debug').append("<br>");
@@ -137,7 +139,7 @@ $('.mapScroll').children("img").on("click", function(){
 $('.drop').delegate('img','mouseover', function(){
 	if (!heroArray[this.id]){ //if initial performance data hasn't been loaded into heroArray yet, perform an adhoc request
 		var reqParam = { queryType: 'basicStats', charHover: this.id, };	
-		var posting = $.post('https://newmeta.herokuapp.com/meta',reqParam);
+		var posting = $.post(indexpath+'/meta',reqParam);
 		posting.done(function(dataObj){	
 			heroArray[reqParam.charHover].games = dataObj.games;
 			heroArray[reqParam.charHover].wins = dataObj.wins;

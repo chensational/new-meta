@@ -10,7 +10,35 @@ var multerS3 = require('multer-s3');
 var path = require('path');
 var fs = require('graceful-fs-extra');
 
-var file_path = 'https://console.aws.amazon.com/s3/home?bucket=newmetahots';
+var temp_dir = path.join(process.cwd(), 'temp/');
+if (!fs.existsSync(temp_dir)) fs.mkdirSync(temp_dir);
+console.log("temp_dir: "+temp_dir);
+
+
+var storage = multer.diskStorage({
+	destination: function(req,file,cb){
+		cb(null,temp_dir);
+	},
+	filename: function(req,file,cb){
+		//console.log(file);
+		cb(null,file.originalname+"_"+Date.now()+path.extname(file.originalname));
+	}
+})
+
+var fileFilter = function(req,file,cb){
+	if (path.extname(file.originalname) !== '.StormReplay') {
+		req.fileValError.push("Error uploading "+file.originalname+" - Only upload .StormReplay files")
+		return cb(null,false) //, new Error("Cannot upload extensions of type: "+path.extname(file.originalname)));
+	}
+	if (file.mimetype === 'application/octet-stream') {
+		cb(null,true);
+	}	
+}
+
+var upload = multer({storage: storage, fileFilter: fileFilter});
+
+
+/*var file_path = 'https://s3.amazonaws.com/newmetahots/' //'https://console.aws.amazon.com/s3/home?bucket=newmetahots';
 
 aws.config = new aws.Config();
 aws.config.update({
@@ -49,6 +77,7 @@ var upload = multer({
 	}),
 	fileFilter: fileFilter
 }) 
+*/
 
 module.exports = function(app, passport){
 	var heroArray = [];
@@ -74,7 +103,7 @@ module.exports = function(app, passport){
 		}
 		res.render('index.ejs',{uploadSuccess: req.files, uploadError:req.fileValError});
 		//insert heroprotocol parse function here
-		Import.extractstuff(file_path,heroesRoster);
+		Import.extractstuff(temp_dir,heroesRoster);
 	})
 
 	app.post('/export',function(req,res){

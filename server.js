@@ -53,15 +53,6 @@ db.once('open',function(){
 	var Performance = require('./app/models/performance');
 	var Record = require('./app/models/record');
 
-	var seedGame = new Game({	
-		_id: '1',
-		map_name: 'seedMap',
-		time: Date.now(),
-		competitive: false
-	})
-
-	seedGame.save();
-
 	console.log("connected to collections!")
 	//routes
 	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport

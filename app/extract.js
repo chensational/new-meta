@@ -5,6 +5,7 @@
 
 const fs = require('graceful-fs-extra');
 const S3fs = require('s3fs'); 
+var aws = require('aws-sdk');
 const path = require('path');
 const zip = require('express-zip');
 const mongoose = require('mongoose');
@@ -13,42 +14,45 @@ const Game = require('./models/games');
 const Performance = require('./models/performance');
 const Record = require('./models/record');
 const Export = require('./excel.js');
-
+/*
+var s3 = new aws.S3();
 var s3options = {
 	region: 'us-east-1',
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 };
-
+*/
 exports.extractstuff = function(file_path,heroesRoster){
+	console.log("file_path @ .extractstuff: "+file_path)
 	var numUpserted = 0;
 	var numExisting = 0;
 	var numError = 0;
-	var fsAWS = new S3fs('newmetahots',s3options);
-	fsAWS.readdirp('newmetahots').then(function(files){
+//	var fsAWS = new S3fs('newmetahots',s3options);
+	fs.readdir(file_path, function(err,files){
+		//console.log(files);
 		if(!files){ console.log("No files uploaded")}
 		else {
 			asyncFor(files,file_path,numExisting,numUpserted,numError,function(res){
-			console.log("Number Games Inserted: "+res.numUpserted);
-			console.log("Number Games Which Already Exist: "+res.numExisting);
-			console.log("Number Games Error: "+res.numError);
-			fsAWS.rmdirp(file_path).then(function (err) {
-				if (!err) console.log('Empty Dir: Success!');
-				//update Performance - writes to the Performance db
-				updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
-					console.log("updatePerformance was a success!")
-					//export stuff into excel files...
-					Export.toExcel(heroesRoster.slice(0),function(err){
-						if(err){
-							console.log("Does this runnnn?");
-							console.log(err);
-						} else {
-							console.log("Export.toExcel successful!");
-						}
-					})
-				});
-			})
-		});
+				console.log("Number Games Inserted: "+res.numUpserted);
+				console.log("Number Games Which Already Exist: "+res.numExisting);
+				console.log("Number Games Error: "+res.numError);
+				fs.emptyDir(file_path, function(err) {
+					if (!err) console.log('Empty Dir: Success!');
+					//update Performance - writes to the Performance db
+					updatePerformance(heroesRoster.slice(0),heroesRoster.slice(0),function(){
+						console.log("updatePerformance was a success!")
+						//export stuff into excel files...
+						Export.toExcel(heroesRoster.slice(0),function(err){
+							if(err){
+								console.log("Does this runnnn?");
+								console.log(err);
+							} else {
+								console.log("Export.toExcel successful!");
+							}
+						})
+					});
+				})
+			});
 		}
 	});
 };
@@ -72,7 +76,9 @@ function updatePerformance(rosterArray,heroesRoster,callback){
 			//console.log("serverResponse: "+JSON.stringify(serverResponse));
 			//console.log("sortedPerformance: "+sortedPerformance);
 			for(n=0;n<sortedPerformance.length;n++){
-				if(!sortedPerformance[n][3]){
+				//console.log("sortedPerformance[n]: "+sortedPerformance[n])
+				if(isNaN(sortedPerformance[n][3])){
+					console.log("replacing NaN/null")
 					var winP = 0;
 				}else{
 					winP = sortedPerformance[n][3];
@@ -84,7 +90,14 @@ function updatePerformance(rosterArray,heroesRoster,callback){
 					p_winPercent: winP
 				}
 			}
+
+			if(isNaN(serverResponse.winPercent)){
+				serverResponse.winPercent = 0;
+			}
 			
+			//console.log(serverResponse);
+			//console.log("perfArray: "+JSON.stringify(perfArray));
+
 			var savePerf = new Performance({
 				_id: Date.now(),
 				char_name: arrayVal,
@@ -179,54 +192,61 @@ function asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb){
 	}
 	else {
 		var single_file = fileArray.splice(0,1);
-		var file = path.resolve(file_path,single_file[0])
-		//console.log("file: "+file);
-		var initdata = heroprotocol.get(heroprotocol.INITDATA,file);
-		var details = heroprotocol.get(heroprotocol.DETAILS,file);
-		if(details===undefined){
-			console.log("error reading file: "+file);
-			numError++;
-			asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb)
-		}
-		else{
-			var map_name = details.m_title;
-			var time = details.m_timeUTC;
-			var competitive = details.m_heroNoDuplicatesAllowed;
-			var bnet_id = details.m_playerList.map(player => { return player.m_toon.m_id });
-			var player_name = details.m_playerList.map(player => { return player.m_name });
-			var player_hero = details.m_playerList.map(player => { return player.m_hero });
-			var team_id = details.m_playerList.map(player => { return player.m_teamId });
-			var match_result = details.m_playerList.map(player => { return player.m_result });
-			var match_id = initdata.m_syncLobbyState.m_gameDescription.m_randomValue;
-			var playerInfo = [];
-			for(n=0;n<bnet_id.length;n++){
-				playerInfo[n] = {
-					bnet_id: bnet_id[n],
-					player_name: player_name[n],
-					player_hero: player_hero[n],
-					team_id: team_id[n],
-					match_result: match_result[n]
-				}
-			}
-			var match = { 
-				_id: match_id, 
-				map_name: map_name,
-				time: time, 
-				competitive:competitive, 
-				playerInfo: playerInfo
-			}
+		var file = (file_path+single_file[0]).toString();
+		console.log("file: "+file);
 
-			Game.update({"_id":match_id},match,{upsert:true},function(err,stuff){
-				if(!err) { 
-					if(stuff.nModified===1){
-						numExisting++;
+		//var params = { Bucket: 'newmetahots', Key: file} //***MAYBE USE FILE****
+		
+		//s3.getObject(params, function(err,data){
+			//if(err) console.log(err, err.stack);
+			var initdata = heroprotocol.get(heroprotocol.INITDATA,file);
+			var details = heroprotocol.get(heroprotocol.DETAILS,file);
+			console.log("details: "+details);
+			if(details===undefined){
+				console.log("error reading file: "+file);
+				numError++;
+				asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb)
+			}
+			else{
+				var map_name = details.m_title;
+				var time = details.m_timeUTC;
+				var competitive = details.m_heroNoDuplicatesAllowed;
+				var bnet_id = details.m_playerList.map(player => { return player.m_toon.m_id });
+				var player_name = details.m_playerList.map(player => { return player.m_name });
+				var player_hero = details.m_playerList.map(player => { return player.m_hero });
+				var team_id = details.m_playerList.map(player => { return player.m_teamId });
+				var match_result = details.m_playerList.map(player => { return player.m_result });
+				var match_id = initdata.m_syncLobbyState.m_gameDescription.m_randomValue;
+				var playerInfo = [];
+				for(n=0;n<bnet_id.length;n++){
+					playerInfo[n] = {
+						bnet_id: bnet_id[n],
+						player_name: player_name[n],
+						player_hero: player_hero[n],
+						team_id: team_id[n],
+						match_result: match_result[n]
 					}
-					if(stuff.hasOwnProperty("upserted")){
-						numUpserted++;
-					}
-					asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb);
-				};
-			})
-		}					
+				}
+				var match = { 
+					_id: match_id, 
+					map_name: map_name,
+					time: time, 
+					competitive:competitive, 
+					playerInfo: playerInfo
+				}
+
+				Game.update({"_id":match_id},match,{upsert:true},function(err,stuff){
+					if(!err) { 
+						if(stuff.nModified===1){
+							numExisting++;
+						}
+						if(stuff.hasOwnProperty("upserted")){
+							numUpserted++;
+						}
+						asyncFor(fileArray,file_path,numExisting,numUpserted,numError,cb);
+					};
+				})
+			}
+		//})					
 	}	
 }
