@@ -13,7 +13,7 @@ var recordSchema = mongoose.Schema({
 		total_wins: Number,
 		total_games: Number,
 		win_percent: Number,
-		game_wins: [Number] }, {strict: false, versionKey:false})
+		game_wins: [Number] }, {strict: true, versionKey:false})
 	]},{strict: false, versionKey: false, collection: 'records'});
 
 recordSchema.statics.findBySearch = function(searchArr){
