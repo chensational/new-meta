@@ -144,7 +144,7 @@ function optimalTeam1(arr,cb){
 					else {//
 						//else find the record document that matches arr
 						var queryResults = Record.findBySearch(arr);
-						queryResults.find(function(err,res){ //
+						queryResults.find().lean().exec(function(err,res){ //
 							//if no record documents matches arr then save results in Record as a new document
 							//console.log("res[0]: "+res[0]);
 							//console.log("result: "+JSON.stringify(result));
@@ -340,7 +340,7 @@ function optimalTeam2(arr,cb){
 					}
 					else { //else find the record document that matches arr						
 						var queryResults2 = Record.findBySearch(arr);
-						queryResults2.find(function(err,res){
+						queryResults2.find().lean().exec(function(err,res){
 							//console.log("res[0]: "+res);
 							//console.log("res: "+JSON.stringify(res));	
 							var res = res.toObject();						
