@@ -148,7 +148,7 @@ function optimalTeam1(arr,cb){
 							//if no record documents matches arr then save results in Record as a new document
 							//console.log("res[0]: "+res[0]);
 							//console.log("result: "+JSON.stringify(result));
-							var res = res.toObject();
+							//var res = res.toObject();
 							if(res[0]===undefined || res.length<1){ //
 							//if(res[0].results.length<1){
 								var record = new Record(result[0]);
@@ -343,7 +343,7 @@ function optimalTeam2(arr,cb){
 						queryResults2.find().lean().exec(function(err,res){
 							//console.log("res[0]: "+res);
 							//console.log("res: "+JSON.stringify(res));	
-							var res = res.toObject();						
+							//var res = res.toObject();						
 							if(res[0]===undefined || res.length<1){ //if no record documents matches arr then save results in Record as a new document
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
