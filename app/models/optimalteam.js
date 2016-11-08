@@ -148,6 +148,7 @@ function optimalTeam1(arr,cb){
 							//if no record documents matches arr then save results in Record as a new document
 							//console.log("res[0]: "+res[0]);
 							//console.log("result: "+JSON.stringify(result));
+							var res = res.toObject();
 							if(res[0]===undefined || res.length<1){ //
 							//if(res[0].results.length<1){
 								var record = new Record(result[0]);
@@ -167,6 +168,7 @@ function optimalTeam1(arr,cb){
 								//!!res is Record DB.  result is games from Game DB where arr of characters are in Team 0
 								for (i in result[0].results){ //
 									var id_new= true;
+									console.log("res[0].results[n]: "+JSON.stringify(res[0].results[n]));
 									for (n in res[0].results){ //
 										console.log("result[0].results[i] - [i] "+i);
 										console.log("res[0].results[n] - [n]"+n);
@@ -340,7 +342,8 @@ function optimalTeam2(arr,cb){
 						var queryResults2 = Record.findBySearch(arr);
 						queryResults2.find(function(err,res){
 							//console.log("res[0]: "+res);
-							//console.log("res: "+JSON.stringify(res));							
+							//console.log("res: "+JSON.stringify(res));	
+							var res = res.toObject();						
 							if(res[0]===undefined || res.length<1){ //if no record documents matches arr then save results in Record as a new document
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
