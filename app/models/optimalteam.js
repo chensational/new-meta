@@ -346,6 +346,7 @@ function optimalTeam2(arr,cb){
 								delete upsertRecord._id;
 								Record.update({"search":arr},upsertRecord,{upsert:true},function(err,stuff){
 									console.log("upsert successful for: "+upsertRecord.search);
+									console.log("upsertRecord: "+JSON.stringify(upsertRecord));
 								})
 							}
 							else {//else see if _id (unique team composition) in results exists in Record collection
