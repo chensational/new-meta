@@ -171,11 +171,14 @@ function optimalTeam1(arr,cb){
 										console.log("result[0].results[i] - [i] "+i);
 										console.log("res[0].results[n] - [n]"+n);
 										if (res[0].results[n]._id === undefined){
-											console.log("res[0].results[n] - [n]: "+n)	
-											console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
+											//console.log("res[0].results[n] - [n]: "+n)	
+											//console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
 											continue;
 										} 								
-										if (result[0].results[i]._id === undefined) console.log("result[0].results[i]: "+result[0].results[i])
+										if (result[0].results[i]._id === undefined) {
+											//console.log("result[0].results[i]: "+JSON.stringify(result[0].results[i]))
+											continue;
+										}
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
 											var newGames = arrayDiff(res[0].results[n].team_game_ids,result[0].results[i].team_game_ids); //new games is collection of different game ids between record database and current results
@@ -329,7 +332,7 @@ function optimalTeam2(arr,cb){
 						var record = new Record(result[0])
 						record.save(function(err,saved){
 							if(err) return console.error(err);
-							console.log("new record saved: "+JSON.stringify(record));
+							console.log("new record saved: ") //+JSON.stringify(record));
 							cb(1);
 						})						
 					}
@@ -344,7 +347,7 @@ function optimalTeam2(arr,cb){
 								delete upsertRecord._id;
 								Record.update({"search":arr},upsertRecord,{upsert:true},function(err,stuff){
 									console.log("upsert successful for: "+upsertRecord.search);
-									console.log("!!!upsertRecord: "+upsertRecord);
+									//console.log("!!!upsertRecord: "+upsertRecord);
 									cb(1);
 								})
 							}
@@ -356,14 +359,17 @@ function optimalTeam2(arr,cb){
 								for (i in result[0].results){
 									var id_new2= true;
 									for (n in res[0].results){	
-										console.log("result[0].results[i]: "+result[0].results[i]);
-										console.log("res[0].results[n]: "+res[0].results[n]);
-										if (res[0].results[n]._id === undefined) {
-											console.log("res[0].results[n]: (n): "+n)
+										console.log("result[0].results[i] - [i] "+i);
+										console.log("res[0].results[n] - [n]"+n);
+										if (res[0].results[n]._id === undefined){
+											//console.log("res[0].results[n] - [n]: "+n)	
+											//console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
 											continue;
 										} //temporary fix.  n evaluating to _path for some reason.								
-										if (result[0].results[i]._id === undefined) console.log("result[0].results[i]: "+result[0].results[i])
-
+										if (result[0].results[i]._id === undefined) {
+											//console.log("result[0].results[i]: "+result[0].results[i])
+											continue
+										}
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
 											var newGames2 = arrayDiff(res[0].results[n].team_game_ids,result[0].results[i].team_game_ids); //new games is collection of different game ids between record database and current results
