@@ -155,6 +155,8 @@ function optimalTeam1(arr,cb){
 								delete upsertRecord._id;
 								Record.update({"search":arr},upsertRecord,{upsert:true},function(err,stuff){ //
 									console.log("upsert successful for: "+upsertRecord.search);
+									console.log("!!!upsertRecord: "+JSON.stringify(upsertRecord));
+									cb(1)
 								})//
 							} // 
 							//else see if _id (unique team composition) in results exists in Record collection
@@ -333,6 +335,7 @@ function optimalTeam2(arr,cb){
 						record.save(function(err,saved){
 							if(err) return console.error(err);
 							console.log("new record saved: "+JSON.stringify(record));
+							cb(1);
 						})						
 					}
 					else { //else find the record document that matches arr						
@@ -347,6 +350,7 @@ function optimalTeam2(arr,cb){
 								Record.update({"search":arr},upsertRecord,{upsert:true},function(err,stuff){
 									console.log("upsert successful for: "+upsertRecord.search);
 									console.log("!!!upsertRecord: "+upsertRecord);
+									cb(1);
 								})
 							}
 							else {//else see if _id (unique team composition) in results exists in Record collection
