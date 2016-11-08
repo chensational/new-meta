@@ -168,10 +168,11 @@ function optimalTeam1(arr,cb){
 								for (i in result[0].results){ //
 									var id_new= true;
 									for (n in res[0].results){ //
-										console.log("result[0].results[i]: "+result[0].results[i]);
-										console.log("res[0].results[n]: "+res[0].results[n]);
+										console.log("result[0].results[i] - [i] "+i);
+										console.log("res[0].results[n] - [n]"+n);
 										if (res[0].results[n]._id === undefined){
-											console.log("res[0].results[n]: (n): "+n)	
+											console.log("res[0].results[n] - [n]: "+n)	
+											console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
 											continue;
 										} 								
 										if (result[0].results[i]._id === undefined) console.log("result[0].results[i]: "+result[0].results[i])
