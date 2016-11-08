@@ -125,7 +125,7 @@ function optimalTeam1(arr,cb){
 		],			
 		function(err,result){
 			if(err) { return err };	
-			if(result.length<1){ //
+			if(result.length<1 || result === undefined){ //
 				console.log("No game data exists with current selected enemies");
 				cb(1);
 			} //
@@ -319,7 +319,7 @@ function optimalTeam2(arr,cb){
 		],			
 		function(err,result){
 			if(err) { return err };	
-			if(result.length<1){
+			if(result.length<1 || result === undefined){
 				console.log("No game data exists with current selected enemies");
 				cb(1);
 			}
