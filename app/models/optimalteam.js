@@ -147,7 +147,7 @@ function optimalTeam1(arr,cb){
 						queryResults.find(function(err,res){ //
 							//if no record documents matches arr then save results in Record as a new document
 							//console.log("res[0]: "+res[0]);
-							console.log("res: "+JSON.stringify(res));
+							console.log("result: "+JSON.stringify(result));
 							if(res[0]===undefined || res.length<1){ //
 							//if(res[0].results.length<1){
 								var record = new Record(result[0]);
