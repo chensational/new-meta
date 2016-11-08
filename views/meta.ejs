@@ -27,10 +27,11 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/">Home</a></li>
-            <li><a href="/login">Log in</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            <!-- <li><a href="/login">Log in</a></li>
             <li><a href="#">Profile</a></li>
-            <li><a href="#">Account</a></li>
-            <li><a href="#">About</a></li>          
+            <li><a href="#">Account</a></li> 
+            <li><a href="#">About</a></li>     -->     
           </ul>
         </div>
       </div>
@@ -52,6 +53,8 @@
           <h2 id="currentMap">Map</h2>
           <div class="row placeholders">            
             <div id="makeMeScrollable" class="col-sm-12 col-md-12 mapScroll">          
+              <img src="css/bg_braxis_holdout.jpg" id="Braxis" class="map"/>
+              <img src="css/bg_warhead_junction.jpg" id="Warhead" class="map"/>
               <img src="css/bg_towers-of-doom.jpg" id="Towers" class="map"/>
               <img src="css/bg_infernal-shrines.jpg" id="Shrines" class="map"/>
               <img src="css/bg_battlefield-of-eternity.jpg" id="Battlefield" class="map"/>
@@ -75,11 +78,7 @@
           <div class="etContainer">
             <h2 id="T2">Enemy Team Composition</h2>
             <div class="playerWrap">          
-              <form method="post" action="">
-                <label for="p6Name">Player 6 username: </label>
-                <input type="text" id="p1Name" />
-              </form>
-              <br>
+              
               <div class="drop" id="p6Drop"></div>
               <select id="p6Char" class="enemyTeamChar" name="p6Char">
                 <option value="- Select One -">- Select one -</option>
@@ -89,11 +88,7 @@
             </div>
               
             <div class="playerWrap">
-              <form method="post" action="">
-                <label for="p7Name">Player 7 username: </label>
-                <input type="text" id="p7Name" />
-              </form>
-              <br>
+             
               <div class="drop" id="p7Drop"></div>          
               <select id="p7Char" class="enemyTeamChar" name="p7Char">
                 <option value="- Select One -">- Select one -</option>
@@ -103,11 +98,7 @@
             </div>
               
             <div class="playerWrap">
-              <form method="post" action="">
-                <label for="p8Name">Player 8 username: </label>
-                <input type="text" id="p8Name" />
-              </form>  
-              <br>      
+                 
               <div class="drop" id="p8Drop"></div>
               <select id="p8Char" class="enemyTeamChar" name="p8Char">
                 <option value="- Select One -">- Select one -</option>
@@ -117,11 +108,7 @@
             </div>
 
             <div class="playerWrap">
-              <form method="post" action="">
-                <label for="p9Name">Player 9 username: </label>
-                <input type="text" id="p9Name" />
-              </form>  
-              <br>      
+                 
               <div class="drop" id="p9Drop"></div>
               <select id="p9Char" class="enemyTeamChar" name="p9Char">
                 <option value="- Select One -">- Select one -</option>
@@ -131,11 +118,7 @@
             </div>  
 
             <div class="playerWrap">
-              <form method="post" action="">
-                <label for="p10Name">Player 10 username: </label>
-                <input type="text" id="p10Name" />
-              </form>  
-              <br>      
+                  
               <div class="drop" id="p10Drop"></div>
               <select id="p10Char" class="enemyTeamChar" name="p10Char">
                 <option value="- Select One -">- Select one -</option>
@@ -226,8 +209,7 @@
   <% } %>
 
   <script src="proj/jquery-1.12.0.js"></script> 
-  <script src="proj/jquery-ui.js"></script>
- 
+  <script src="proj/jquery-ui.js"></script> 
   <script src="proj/newmeta.js"></script>
 
   <!-- Latest version (3.1.4) of jQuery Mouse Wheel by Brandon Aaron

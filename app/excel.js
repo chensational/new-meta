@@ -3,8 +3,37 @@ var Performance = require('./models/performance');
 var Record = require('./models/record');
 var Export = require('./excel.js');
 var fs = require('graceful-fs-extra');
-
 var excelbuilder = require('msexcel-builder');
+
+exports.exportPerformance = function(arr,cb){
+	var p_workbook = excelbuilder.createWorkbook('./excel','performance.xlsx');
+	console.log("running exportPerformance");
+	return new Promise(function(resolve,reject){
+		var perf_sheet = p_workbook.createSheet('Performances',10,5000);
+		var p_row = 1;
+		perf_sheet.set(1,p_row,'Character');
+		perf_sheet.set(2,p_row,'Total Games');
+		perf_sheet.set(3,p_row,'Total Wins');
+		perf_sheet.set(4,p_row,'Win Percent');
+		perf_sheet.set(5,p_row,'Opposing Character');
+		perf_sheet.set(6,p_row,'Games Against Opposing Char');
+		perf_sheet.set(7,p_row,'Wins Against Opposing Char');
+		perf_sheet.set(8,p_row,'Win Percent Against Opposing Char');
+
+		asyncFor(arr.slice(0),perf_sheet,p_row,function(){
+			p_workbook.save(function(err,merp){
+				if(err){
+					console.log("error creating performance workbook - action cancelled");
+					p_workbook.cancel();
+				} else {
+					console.log('Performance workbook created.');
+					cb();
+				}
+			})
+			resolve('Success');
+		})
+	})
+}
 
 function asyncFor(arr,perf_sheet,p_row,cb){
 	if(arr.length<1){
@@ -29,37 +58,6 @@ function asyncFor(arr,perf_sheet,p_row,cb){
 			asyncFor(arr,perf_sheet,p_row,cb);
 		})
 	}
-}
-exports.exportPerformance = function(arr,cb){
-	var p_workbook = excelbuilder.createWorkbook('./excel','performance.xlsx');
-	console.log("running exportPerformance");
-	return new Promise(function(resolve,reject){
-		var perf_sheet = p_workbook.createSheet('Performances',10,5000);
-		var p_row = 1;
-		perf_sheet.set(1,p_row,'Character');
-		perf_sheet.set(2,p_row,'Total Games');
-		perf_sheet.set(3,p_row,'Total Wins');
-		perf_sheet.set(4,p_row,'Win Percent');
-		perf_sheet.set(5,p_row,'Opposing Character');
-		perf_sheet.set(6,p_row,'Games Against Opposing Char');
-		perf_sheet.set(7,p_row,'Wins Against Opposing Char');
-		perf_sheet.set(8,p_row,'Win Percent Against Opposing Char');
-
-		asyncFor(arr.slice(0),perf_sheet,p_row,function(){
-			console.log("ajaxPerformance resolved");
-			p_workbook.save(function(err,merp){
-				console.log("Performance workbook.save running...");
-				if(err){
-					console.log("P_WORKBOOK CANCELLED");
-					p_workbook.cancel();
-				} else {
-					console.log('Performance Sheet Created.');
-					cb();
-				}
-			})
-			resolve('success');
-		})
-	})
 }
 
 exports.exportGames = function(cb){
@@ -109,10 +107,10 @@ exports.exportGames = function(cb){
 			workbook.save(function(err,merp){
 				console.log("Game workbook.save running...");
 				if(err){
-					console.log("WORKBOOK CANCELLED");
+					console.log("error creating game workbook - action cancelled");
 					workbook.cancel();
 				} else {
-					console.log('Game Sheet Created.');
+					console.log('Game workbook created.');
 					cb();
 				}
 			})
@@ -137,7 +135,7 @@ exports.toExcel = function(arr,cb){
 		cb();
 		
 	}, function(err){
-		console.log("PROMISE FUNCTION ERR");
+		console.log("exports.toExcel failed to return promises");
 		cb(err);
 	})
 }

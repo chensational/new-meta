@@ -52,13 +52,12 @@ db.once('open',function(){
 	var Game = require('./app/models/games');
 	var Performance = require('./app/models/performance');
 	var Record = require('./app/models/record');
-
-	console.log("connected to collections!")
+	var Feedback = require('./app/models/feedback');
+	console.log("Now connected to mongodb collections!")
 	//routes
 	require('./app/routes.js')(app,passport); //load our routes and pass in our app and fully configured passport
 
 })
-
 
 //launch
 app.listen(port);

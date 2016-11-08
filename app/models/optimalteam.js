@@ -1,3 +1,4 @@
+//restarting mongodb locally:
 //netstat -anbo
 //taskkill /f /pid 2648
 //mongod.exe --dbpath c:\mongodb\data\db
@@ -8,15 +9,11 @@ var Performance = require('./performance');
 var Record = require('./record');
 var Optimize = require('./optimalteam');
 
-//mongoose.createConnection('mongodb://heroku_stzbwk35:up7ofiq7vqjmb9062h05ibhsbv@ds139847.mlab.com:39847/heroku_stzbwk35'); //connect to our database
-
 module.exports.optimalTeam = function(arr,callback){
 	//console.log(arr);
-	optimalTeam1(arr,
-		function(nextTeam){
-			console.log("OPTIMALTEAM 1 COMPLETE");
-			optimalTeam2(arr,
-		function(merp){
+	optimalTeam1(arr, function(next){
+		console.log("OPTIMALTEAM 1 COMPLETE");
+		optimalTeam2(arr, function(merp){
 			console.log("OPTIMALTEAM 2 COMPLETE");
 			Optimize.sortOptimal(arr,callback);
 		});
@@ -27,7 +24,7 @@ module.exports.sortOptimal = function(arr,cb){
 	Record.aggregate([
 		{"$match": { "search": arr.join()}},
 		{"$unwind": "$results"},
-		{"$sort": {"results.total_games": -1}},
+		{"$sort": {"results.win_percent": -1}},
 		{"$limit": 10}
 	],
 	function(err,result){
@@ -38,6 +35,7 @@ module.exports.sortOptimal = function(arr,cb){
 }
 
 function optimalTeam1(arr,cb){
+	//search Game DB for arr as Team 0 composition
 	console.log("Searching for Games with this Team 0 composition: "+arr);
 	Game.aggregate([
 		{ "$match": {"playerInfo.player_hero": {"$all": arr}} },
@@ -104,8 +102,8 @@ function optimalTeam1(arr,cb){
 			"enemyTeamHeroes": 1,
 			"game_wins": 1,
 			"total_wins": 1,
-			"total_games": 1, // {"$size": "$results.team_game_ids"},
-			"win_percent": { "$divide": ["$total_wins","$total_games"]},//{ "$divide": ["$total_wins","$total_games"]},
+			"total_games": 1, 
+			"win_percent": { "$divide": ["$total_wins","$total_games"]},
 			"search": 1
 		}},		
 		{ "$group": {
@@ -120,8 +118,8 @@ function optimalTeam1(arr,cb){
 			"results.team_game_ids": 1,
 			"results.enemyTeamHeroes": 1,
 			"results.total_wins": 1,
-			"results.total_games": 1, // {"$size": "$results.team_game_ids"},
-			"results.win_percent": 1,//{ "$divide": [5,1]},// { "$divide": ["$results.$total_wins","$results.$total_games"]},
+			"results.total_games": 1, 
+			"results.win_percent": 1,
 			"results.game_wins": 1
 		}}, 
 		],			
@@ -133,7 +131,6 @@ function optimalTeam1(arr,cb){
 			} //
 			else { //
 				console.log("Checking collections...");
-				//console.log(JSON.stringify(result));
 				// if the Record Collection does not exist, create the Record collection and save results into Record				
 				mongoose.connection.db.listCollections({name: 'records'}).next(function(err,info){
 					if(info<1){//
@@ -149,8 +146,9 @@ function optimalTeam1(arr,cb){
 						var queryResults = Record.findBySearch(arr);
 						queryResults.find(function(err,res){ //
 							//if no record documents matches arr then save results in Record as a new document
-							//console.log(res[0]);
-							if(res[0]===undefined){ //
+							console.log("res[0]: "+res[0]);
+							console.log("res: "+res);
+							if(res[0]===undefined || res.length<1){ //
 							//if(res[0].results.length<1){
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
@@ -164,7 +162,7 @@ function optimalTeam1(arr,cb){
 								var updatedRecord = res[0].results.slice(0)
 								var numNew = 0;
 								var numMatch = 0;
-								//!!res is Record DB.  result is results based on the arr of characters you're currently evaluating
+								//!!res is Record DB.  result is games from Game DB where arr of characters are in Team 0
 								for (i in result[0].results){ //
 									var id_new= true;
 									for (n in res[0].results){ //
@@ -326,8 +324,10 @@ function optimalTeam2(arr,cb){
 					}
 					else { //else find the record document that matches arr						
 						var queryResults2 = Record.findBySearch(arr);
-						queryResults2.find(function(err,res){							
-							if(res[0]===undefined){ //if no record documents matches arr then save results in Record as a new document
+						queryResults2.find(function(err,res){
+							console.log("res[0]: "+res);
+							console.log("res: "+res);							
+							if(res[0]===undefined || res.length<1){ //if no record documents matches arr then save results in Record as a new document
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
 								delete upsertRecord._id;

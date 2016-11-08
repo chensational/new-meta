@@ -1,26 +1,27 @@
-var Game = require('./models/games');
-var Performance = require('./models/performance');
-var Record = require('./models/record');
-var Optimize = require('./models/optimalteam');
-var Import = require('./extract.js');
-var zip = require('express-zip');
-var aws = require('aws-sdk');
-var multer = require('multer');
-var multerS3 = require('multer-s3');
-var path = require('path');
-var fs = require('graceful-fs-extra');
+const Game = require('./models/games');
+const Performance = require('./models/performance');
+const Record = require('./models/record');
+const Feedback = require('./models/feedback');
+const Optimize = require('./models/optimalteam');
+const Import = require('./extract.js');
+const Export = require('./excel.js');
+
+const zip = require('express-zip');
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const path = require('path');
+const fs = require('graceful-fs-extra');
 
 var temp_dir = path.join(process.cwd(), 'temp/');
 if (!fs.existsSync(temp_dir)) fs.mkdirSync(temp_dir);
 console.log("temp_dir: "+temp_dir);
-
 
 var storage = multer.diskStorage({
 	destination: function(req,file,cb){
 		cb(null,temp_dir);
 	},
 	filename: function(req,file,cb){
-		//console.log(file);
 		cb(null,file.originalname+"_"+Date.now()+path.extname(file.originalname));
 	}
 })
@@ -81,11 +82,11 @@ var upload = multer({
 
 module.exports = function(app, passport){
 	var heroArray = [];
-	var heroesRoster = ["Abathur","Anub\'arak", "Artanis", "Arthas", "Azmodan", "Brightwing", "Chen", "Cho", "Diablo", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Muradin", "Murky", "Nazeebo", "Nova", "Raynor", "Rehgar", "Rexxar", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Xul", "Zagara", "Zeratul"];
+	var heroesRoster = ["Abathur", "Alarak", "Anub\'arak", "Artanis", "Arthas", "Auriel", "Azmodan", "Brightwing", "Chen", "Cho", "Chromie", "Diablo", "Dehaka", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Gul\'Dan", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Medivh",  "Muradin", "Murky", "Nazeebo", "Nova", "Ragnaros", "Raynor", "Rehgar", "Rexxar", "Samuro", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tracer", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Varian", "Xul", "Zagara", "Zarya", "Zeratul"];
 	
 	heroesRoster.map(function(hero){
 		//if(!heroArray[hero]){			
-			calcStats(hero,function(data){
+			fillPerf(hero,function(data){
 				heroArray[hero] = data;
 			});					
 		//}	
@@ -107,19 +108,48 @@ module.exports = function(app, passport){
 	})
 
 	app.post('/export',function(req,res){
-		res.zip([
-			{ path: '../excel/games.xlsx', name: 'Games.xlsx'},
-			{ path: '../excel/performance.xlsx', name: 'Performance.xlsx'}
-			], "NewMetaExport.zip" );		
+		Export.toExcel(heroesRoster.slice(0),function(err){
+			if(err){
+				console.log(err);
+			} else {
+				console.log("Export.toExcel successful!");
+				res.zip([{ path: '../excel/games.xlsx', name: 'Games.xlsx'}, { path: '../excel/performance.xlsx', name: 'Performance.xlsx'}], "NewMetaExport.zip" );		
+			}
+		}) 
 	})
 
 	app.get('/meta',function(req,res){
 		res.render('meta.ejs', { heroesRoster: JSON.stringify(heroesRoster) });
 	})
 
+	app.get('/feedback',function(req,res){
+		res.render('feedback.ejs');
+	})
+
+	app.post('/feedback',function(req,res){
+		var queryType = req.body.type;		
+		if(queryType==="load"){
+			Feedback.pastComments(req.body.limitDate).then(function(data){
+				console.log("Past comments: "+data);
+				res.send(data); // add feedback to current view
+			});
+		}
+		if(queryType==="update"){
+			console.log("update runs: "+JSON.stringify(req.body));
+			var date_now = Date.now();
+			var newFeedback = new Feedback({
+				_id: date_now,
+				username: req.body.username,
+				comments: req.body.comments,
+				upvotes: 0
+			})
+			newFeedback.save();
+			res.send(newFeedback);
+		}		
+	})
+
 	app.post('/meta',function(req,res){
-		var queryType = req.body.queryType;
-		
+		var queryType = req.body.queryType;		
 		if(queryType==="calcStats"){
 			var charHov = req.body.charHover;
 			res.send(heroArray[charHov]);//do stuff here
@@ -127,7 +157,7 @@ module.exports = function(app, passport){
 		
 		if(queryType==="basicStats"){
 			var charHov = req.body.charHover;
-			calcStats(charHov, function(data){
+			fillPerf(charHov, function(data){
 				heroArray[charHov] = data;
 				res.send(data);
 			});	
@@ -137,12 +167,12 @@ module.exports = function(app, passport){
 			//console.log(req.body);
 			var enemyTeam = JSON.parse(req.body.enemyTeam);
 			Optimize.optimalTeam(enemyTeam, function(bestTeamComps){
-				console.log("DOES THIS HAPPEN?");
 				res.send(bestTeamComps);
 			});			
 		}			
 	});
 
+/*
 	app.get('/login',function(req,res){
 		res.render('login.ejs', { message: req.flash('loginMessage') });
 	});
@@ -174,6 +204,7 @@ module.exports = function(app, passport){
 		req.logout();
 		res.redirect('/');
 	});
+*/
 };
 
 function Hero(name,games,wins,winPercent,performance){
@@ -184,14 +215,12 @@ function Hero(name,games,wins,winPercent,performance){
 	this.performance = performance;
 }
 
-//intent of this function is to populate heroArray in this app 
-//with the most recent Performance db data
-function calcStats(char,cb){
+//populate heroArray with the most recent Performance db data
+function fillPerf(char,cb){
 	var pQueryStream = Performance.basicStats(char).
 		sort({_id: -1}).limit(1).stream();
 	pQueryStream.on('data',function(data){		
 		var charStats = new Hero(data.char_name,data.games,data.wins,data.winPercent,data.performance);
-		//console.log("charStats!!!: "+charStats);
 		cb(charStats);
 	})
 }

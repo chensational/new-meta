@@ -1,0 +1,119 @@
+<!-- views/feedback.ejs -->
+<!doctype html>
+<html lang="en">
+  <head>  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title id="header">Heroes feedback</title>
+    <link href="/bootstrap-meta.css" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link href="css/index.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">New Meta</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home</a></li>
+            <li><a href="/meta">Analysis</a></li>
+            <!-- <li><a href="/login">Log in</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Account</a></li> 
+            <li><a href="#">About</a></li>     -->     
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">    
+          
+          <form id="contact-form" method='post' action="/feedback" role="form"> 
+            <div class="controls">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="form_name">Username *</label>
+                    <input id="form_name" type="text" name="username" class="form-control" 
+                      placeholder="Enter your username *" 
+                      required="required" data-error="Username is required.">
+                    <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="form_message">Comment *</label>
+                    <textarea id="form_message" name="message" class="form-control" 
+                      placeholder="Message for admins *" rows="4" required="required"
+                      data-error="Please, leave us a message."></textarea>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                </div>
+                <div class="col-md-12"> 
+                  <input type="submit" value="Send message" class="btn btn-success btn-send"> 
+                </div>
+              </div>              
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+        
+    <br>
+    <div class="container">
+    <div class="row">
+      <h1>Past comments</h1>
+      <div class="comments-container">
+        <ul id="comments-list" class="comments-list">
+          <li>
+            <div class="comment-main-level">
+              <div class="comment-box">
+                <div class="comment-head">
+                  <h6 class="comment-name by-author">Albert's Notes</h6>
+                  <span></span>
+                  <!-- <i class="fa fa-reply"></i -->
+                  <i class="fa fa-heart"></i>
+                </div>
+                <div class="comment-content">
+                  - Map selection does not offer additional filtering.  Not enough games for it to be useful yet.
+                  <br>- Export to Spreadsheet doesn't work currently. Don't try to use it.
+                  <br>- If you're interested, contribute and submit merge requests via the <a href="https://github.com/chensational/new-meta">Github repository here </a>
+                </div>
+              </div>
+          </li>
+          <!-- JQuery function will fill in past comments here-->
+        </ul>
+      </div>
+      <div class="loadmore btn btn-default"> 
+            Load More Comments...
+      </div> 
+    </div> 
+    </div> 
+
+  <div class="container">
+    <div class="row">
+      <br>
+      <ul id="debug">DEBUGGING BELOW. </ul>
+    </div>
+  </div>
+  <script src="proj/jquery-1.12.0.js"></script> 
+  <script src="proj/jquery-ui.js"></script> 
+  <script src="proj/fb.js"></script>
+  </body>
+</html>

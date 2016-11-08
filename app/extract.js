@@ -13,7 +13,6 @@ const heroprotocol = require('heroprotocol');
 const Game = require('./models/games');
 const Performance = require('./models/performance');
 const Record = require('./models/record');
-const Export = require('./excel.js');
 /*
 var s3 = new aws.S3();
 var s3options = {
@@ -44,14 +43,7 @@ exports.extractstuff = function(file_path,heroesRoster){
 							console.log("updatePerformance was a success!")
 							//export stuff into excel files...
 							/*
-							Export.toExcel(heroesRoster.slice(0),function(err){
-								if(err){
-									console.log("Does this runnnn?");
-									console.log(err);
-								} else {
-									console.log("Export.toExcel successful!");
-								}
-							}) */
+							*/
 						});
 					}
 				})

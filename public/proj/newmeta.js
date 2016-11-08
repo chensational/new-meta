@@ -1,9 +1,8 @@
-var heroesMapsObj = { Towers: "Towers of Doom", Shrines: "Infernal Shrines", Battlefield: "Battlefield of Eternity", Tomb: "Tomb of the Spider Queen", Temple: "Sky Temple", Garden: "Garden of Terror", Bay: "Blackheart's Bay", Shire: "Dragon Shire", Mines: "Haunted Mines", Hollow: "Cursed Hollow"};
+var heroesMapsObj = { Braxis: "Braxis Holdout", Warhead: "Warhead Junction", Towers: "Towers of Doom", Shrines: "Infernal Shrines", Battlefield: "Battlefield of Eternity", Tomb: "Tomb of the Spider Queen", Temple: "Sky Temple", Garden: "Garden of Terror", Bay: "Blackheart's Bay", Shire: "Dragon Shire", Mines: "Haunted Mines", Hollow: "Cursed Hollow"};
 var heroesRoster = heroesRoster;
 var heroArray = [];
 var currentMap = "";
-var indexpath = 'https://newmeta.herokuapp.com' //'http://localhost:5000'; 
-
+var indexpath = 'https://newmeta.herokuapp.com';  //'http://localhost:5000'; // 'https://newmeta.herokuapp.com'; 
 
 function Hero(name,games,wins,winPercent,performance){
 	this.name = name;
