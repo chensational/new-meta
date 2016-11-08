@@ -20,7 +20,7 @@ module.exports.optimalTeam = function(arr,callback){
 	})
 };
 
-module.exports.sortOptimal = function(arr,cb){
+module.exports.sortOptimal = function(arr,callback){
 	Record.aggregate([
 		{"$match": { "search": arr.join()}},
 		{"$unwind": "$results"},
@@ -30,7 +30,7 @@ module.exports.sortOptimal = function(arr,cb){
 	function(err,result){
 		if(err){console.log(err)};
 		console.log("returning result from sortOptimal!");
-		cb(result);
+		callback(result);
 	})
 }
 
