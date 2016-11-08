@@ -146,8 +146,8 @@ function optimalTeam1(arr,cb){
 						var queryResults = Record.findBySearch(arr);
 						queryResults.find(function(err,res){ //
 							//if no record documents matches arr then save results in Record as a new document
-							console.log("res[0]: "+res[0]);
-							console.log("res: "+res);
+							//console.log("res[0]: "+res[0]);
+							console.log("res: "+JSON.stringify(res));
 							if(res[0]===undefined || res.length<1){ //
 							//if(res[0].results.length<1){
 								var record = new Record(result[0]);
@@ -325,8 +325,8 @@ function optimalTeam2(arr,cb){
 					else { //else find the record document that matches arr						
 						var queryResults2 = Record.findBySearch(arr);
 						queryResults2.find(function(err,res){
-							console.log("res[0]: "+res);
-							console.log("res: "+res);							
+							//console.log("res[0]: "+res);
+							console.log("res: "+JSON.stringify(res));							
 							if(res[0]===undefined || res.length<1){ //if no record documents matches arr then save results in Record as a new document
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
