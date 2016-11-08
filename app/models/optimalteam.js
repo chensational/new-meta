@@ -168,6 +168,8 @@ function optimalTeam1(arr,cb){
 								for (i in result[0].results){ //
 									var id_new= true;
 									for (n in res[0].results){ //
+										console.log("result[0].results[i]: "+result[0].results[i]);
+										console.log("res[0].results[n]: "+res[0].results[n]);
 										if (res[0].results[n]._id === undefined){
 											console.log("res[0].results[n]: (n): "+n)	
 											continue;
@@ -353,6 +355,8 @@ function optimalTeam2(arr,cb){
 								for (i in result[0].results){
 									var id_new2= true;
 									for (n in res[0].results){	
+										console.log("result[0].results[i]: "+result[0].results[i]);
+										console.log("res[0].results[n]: "+res[0].results[n]);
 										if (res[0].results[n]._id === undefined) {
 											console.log("res[0].results[n]: (n): "+n)
 											continue;
