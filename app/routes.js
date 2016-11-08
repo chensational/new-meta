@@ -154,18 +154,14 @@ module.exports = function(app, passport){
 			var charHov = req.body.charHover;
 			res.send(heroArray[charHov]);//do stuff here
 			return;
-		};
-		
-		else if(queryType==="basicStats"){
+		} else if(queryType==="basicStats"){
 			var charHov = req.body.charHover;
 			fillPerf(charHov, function(data){
 				heroArray[charHov] = data;
 				res.send(data);
 				return;
 			});	
-		};
-
-		else if(queryType==='optimalTeam'){
+		} else if("optimalTeam"){
 			//console.log(req.body);
 			var enemyTeam = JSON.parse(req.body.enemyTeam);
 			Optimize.optimalTeam(enemyTeam, function(bestTeamComps){
