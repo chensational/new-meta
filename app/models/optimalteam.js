@@ -168,7 +168,10 @@ function optimalTeam1(arr,cb){
 								for (i in result[0].results){ //
 									var id_new= true;
 									for (n in res[0].results){ //
-										if (res[0].results[n]._id === undefined) console.log("res[0].results[n]: (n): "+n+" "+res[0].results)									
+										if (res[0].results[n]._id === undefined){
+											console.log("res[0].results[n]: (n): "+n)	
+											continue;
+										} 								
 										if (result[0].results[i]._id === undefined) console.log("result[0].results[i]: "+result[0].results[i])
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
@@ -351,8 +354,8 @@ function optimalTeam2(arr,cb){
 									var id_new2= true;
 									for (n in res[0].results){	
 										if (res[0].results[n]._id === undefined) {
-											console.log("res[0].results[n]: (n): "+n+" "+res[0].results)
-											break;
+											console.log("res[0].results[n]: (n): "+n)
+											continue;
 										} //temporary fix.  n evaluating to _path for some reason.								
 										if (result[0].results[i]._id === undefined) console.log("result[0].results[i]: "+result[0].results[i])
 
