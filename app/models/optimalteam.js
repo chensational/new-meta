@@ -174,11 +174,11 @@ function optimalTeam1(arr,cb){
 										if(result[0].results[i]._id===undefined){
 											console.log("result results id: "+result[0].results[i]._id);
 											console.log("result results[i]: "+result[0].results[i]);
-										}*/
+										}
 										console.log("res results id: "+res[0].results[n]._id);
 										console.log("***"+res[0].results[n]);
 										console.log("result results id: "+result[0].results[i]._id);
-										console.log("***"+result[0].results[i]);
+										console.log("***"+result[0].results[i]); */
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
 											var newGames = arrayDiff(res[0].results[n].team_game_ids,result[0].results[i].team_game_ids); //new games is collection of different game ids between record database and current results
@@ -339,7 +339,7 @@ function optimalTeam2(arr,cb){
 						var queryResults2 = Record.findBySearch(arr);
 						queryResults2.find(function(err,res){
 							//console.log("res[0]: "+res);
-							console.log("res: "+JSON.stringify(res));							
+							//console.log("res: "+JSON.stringify(res));							
 							if(res[0]===undefined || res.length<1){ //if no record documents matches arr then save results in Record as a new document
 								var record = new Record(result[0]);
 								var upsertRecord = record.toObject();
