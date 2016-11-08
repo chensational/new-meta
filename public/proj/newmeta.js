@@ -14,7 +14,7 @@ function Hero(name,games,wins,winPercent,performance){
 
 (function(){ //fills html with images of all characters on roster
 	for (n=0;n<heroesRoster.length;n++){
-		$('.heroesContainer').append('<div class="drop"><img id="'+heroesRoster[n]+'" src="public/css/'+heroesRoster[n]+'.jpg" /></div>')
+		$('.heroesContainer').append('<div class="drop"><img id="'+heroesRoster[n]+'" src="css/'+heroesRoster[n]+'.jpg" /></div>')
 	}
 })();
 
