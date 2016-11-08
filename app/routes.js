@@ -82,7 +82,7 @@ var upload = multer({
 
 module.exports = function(app, passport){
 	var heroArray = [];
-	var heroesRoster = ["Abathur", "Alarak", "Anub\'arak", "Artanis", "Arthas", "Auriel", "Azmodan", "Brightwing", "Chen", "Cho", "Chromie", "Diablo", "Dehaka", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Gul'Dan", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Medivh",  "Muradin", "Murky", "Nazeebo", "Nova", "Ragnaros", "Raynor", "Rehgar", "Rexxar", "Samuro", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tracer", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Varian", "Xul", "Zagara", "Zarya", "Zeratul"];
+	var heroesRoster = ["Abathur", "Alarak", "Anub\'arak", "Artanis", "Arthas", "Auriel", "Azmodan", "Brightwing", "Chen", "Cho", "Chromie", "Diablo", "Dehaka", "E.T.C.", "Falstad", "Gall", "Gazlowe", "Greymane", "Gul\'dan", "Illidan", "Jaina", "Johanna", "Kael\'thas", "Kerrigan", "Kharazim", "Leoric", "Li Li", "Li-Ming", "Lt. Morales", "Lunara", "Malfurion", "Medivh",  "Muradin", "Murky", "Nazeebo", "Nova", "Ragnaros", "Raynor", "Rehgar", "Rexxar", "Samuro", "Sgt. Hammer", "Sonya", "Stitches", "Sylvanas", "Tassadar", "The Butcher", "The Lost Vikings", "Thrall", "Tracer", "Tychus", "Tyrael", "Tyrande", "Uther", "Valla", "Varian", "Xul", "Zagara", "Zarya", "Zeratul"];
 	
 	heroesRoster.map(function(hero){
 		//if(!heroArray[hero]){			
