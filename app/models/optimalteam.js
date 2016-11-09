@@ -15,12 +15,14 @@ module.exports.optimalTeam = function(arr,callback){
 		console.log("OPTIMALTEAM 1 COMPLETE");
 		optimalTeam2(arr, function(merp){
 			console.log("OPTIMALTEAM 2 COMPLETE");
-			Optimize.sortOptimal(arr,callback);
+			sortOptimal(arr,function(result){
+				callback(result);
+			})
 		});
 	})
 };
 
-module.exports.sortOptimal = function(arr,callback){
+function sortOptimal(arr,cb){
 	Record.aggregate([
 		{"$match": { "search": arr.join()}},
 		{"$unwind": "$results"},
@@ -30,7 +32,7 @@ module.exports.sortOptimal = function(arr,callback){
 	function(err,result){
 		if(err){console.log(err)};
 		console.log("returning result from sortOptimal!");
-		callback(result);
+		return result;
 	})
 }
 
@@ -139,6 +141,7 @@ function optimalTeam1(arr,cb){
 						record.save(function(err,saved){
 							if(err) return console.error(err);
 							console.log("new record saved: "+JSON.stringify(record));
+							cb(1);
 						})		//				
 					} //
 					else {//
@@ -171,15 +174,6 @@ function optimalTeam1(arr,cb){
 									for (n in res[0].results){ //
 										console.log("result[0].results[i] - [i] "+i);
 										console.log("res[0].results[n] - [n]"+n);
-										if (res[0].results[n]._id === undefined){
-											//console.log("res[0].results[n] - [n]: "+n)	
-											//console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
-											continue;
-										} 								
-										if (result[0].results[i]._id === undefined) {
-											//console.log("result[0].results[i]: "+JSON.stringify(result[0].results[i]))
-											continue;
-										}
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
 											var newGames = arrayDiff(res[0].results[n].team_game_ids,result[0].results[i].team_game_ids); //new games is collection of different game ids between record database and current results
@@ -212,18 +206,19 @@ function optimalTeam1(arr,cb){
 
 								if (numMatch===result[0].results.length){ //if all ids exist in database already and have no unique team-specific data then...
 									console.log("numMatch ("+numMatch+") equals unique hero combinations against "+arr+" ("+result[0].results.length+")"); //don't do anything
+									cb(1);
 								} //
 								else{ //if even one id does not exist in database or unique team-specific data exists then update the database
 									res[0].results=updatedRecord ;
 									var saveRecords=new Record(res[0]) 
 									Record.update({"search":arr},saveRecords,{upsert:false},function(err,stuff){
 										console.log("Update successful");
+										cb(1);
 									}) //
 								}//
 							}//
 						}) //queryresults close
 					} //else close
-					cb(1);
 				})// mongoose connection close
 			} // else close
 		} // callback close						
@@ -363,15 +358,6 @@ function optimalTeam2(arr,cb){
 									for (n in res[0].results){	
 										console.log("result[0].results[i] - [i] "+i);
 										console.log("res[0].results[n] - [n]"+n);
-										if (res[0].results[n]._id === undefined){
-											//console.log("res[0].results[n] - [n]: "+n)	
-											//console.log(JSON.stringify("res[0].results[n]: "+res[0].results[n]))
-											continue;
-										} //temporary fix.  n evaluating to _path for some reason.								
-										if (result[0].results[i]._id === undefined) {
-											//console.log("result[0].results[i]: "+result[0].results[i])
-											continue
-										}
 										if (res[0].results[n]._id.join() === result[0].results[i]._id.join()){ //if _id (team composition) in res exists in result then do the following
 											console.log("***MATCH*** | i: "+i+" and n: "+n);//set game id differences across two totalGames arrays to newGames											
 											var newGames2 = arrayDiff(res[0].results[n].team_game_ids,result[0].results[i].team_game_ids); //new games is collection of different game ids between record database and current results
@@ -404,18 +390,19 @@ function optimalTeam2(arr,cb){
 
 								if (numMatch2===result[0].results.length){ //if all ids exist in database already and have no unique team-specific data then...
 									console.log("numMatch2 ("+numMatch2+") equals unique hero combinations against "+arr+" ("+result[0].results.length+")"); //don't do anything
+									cb(1);
 								}
 								else{ //if even one id does not exist in database or unique team-specific data exists then update the database
 									res[0].results=updatedRecord2 ;
 									var saveRecords=new Record(res[0]) 
 									Record.update({"search":arr},saveRecords,{upsert:false},function(err,stuff){
 										console.log("Update successful");
+										cb(1);
 									})
 								}
 							}
 						})
 					}
-					cb("success!");
 				})
 			}				
 		}	

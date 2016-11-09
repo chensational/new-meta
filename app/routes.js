@@ -163,10 +163,10 @@ module.exports = function(app, passport){
 			});	
 		} else if("optimalTeam"){
 			//console.log(req.body);
-			var enemyTeam = JSON.parse(req.body.enemyTeam);
+			var enemyTeam = req.body.enemyTeam;
+			console.log("enemyTeam var: "+enemyTeam);
 			Optimize.optimalTeam(enemyTeam, function(bestTeamComps){
-				return res.send(bestTeamComps);
-				
+				return res.send(bestTeamComps);				
 			});			
 		}			
 	});
