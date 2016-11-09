@@ -168,7 +168,6 @@ function optimalTeam1(arr,cb){
 								//!!res is Record DB.  result is games from Game DB where arr of characters are in Team 0
 								for (i in result[0].results){ //
 									var id_new= true;
-									console.log("res[0].results[n]: "+JSON.stringify(res[0].results[n]));
 									for (n in res[0].results){ //
 										console.log("result[0].results[i] - [i] "+i);
 										console.log("res[0].results[n] - [n]"+n);
