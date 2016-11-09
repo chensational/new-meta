@@ -152,21 +152,21 @@ module.exports = function(app, passport){
 		var queryType = req.body.queryType;		
 		if(queryType==="calcStats"){
 			var charHov = req.body.charHover;
-			res.send(heroArray[charHov]);//do stuff here
-			return;
+			return res.send(heroArray[charHov]);//do stuff here
+			
 		} else if(queryType==="basicStats"){
 			var charHov = req.body.charHover;
 			fillPerf(charHov, function(data){
 				heroArray[charHov] = data;
-				res.send(data);
-				return;
+				return res.send(data);
+				
 			});	
 		} else if("optimalTeam"){
 			//console.log(req.body);
 			var enemyTeam = JSON.parse(req.body.enemyTeam);
 			Optimize.optimalTeam(enemyTeam, function(bestTeamComps){
-				res.send(bestTeamComps);
-				return;
+				return res.send(bestTeamComps);
+				
 			});			
 		}			
 	});
