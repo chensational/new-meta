@@ -32,7 +32,7 @@ function sortOptimal(arr,cb){
 	function(err,result){
 		if(err){console.log(err)};
 		console.log("returning result from sortOptimal!");
-		return result;
+		cb(result);
 	})
 }
 
