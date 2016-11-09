@@ -163,8 +163,7 @@ module.exports = function(app, passport){
 			});	
 		} else if("optimalTeam"){
 			//console.log(req.body);
-			var enemyTeam = req.body.enemyTeam;
-			console.log("enemyTeam var: "+enemyTeam);
+			var enemyTeam = JSON.parse(req.body.enemyTeam);
 			Optimize.optimalTeam(enemyTeam, function(bestTeamComps){
 				return res.send(bestTeamComps);				
 			});			
